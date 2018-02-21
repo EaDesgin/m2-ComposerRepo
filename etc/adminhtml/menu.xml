@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="Eadesigndev_ComposerRepo::composerrepo" title="Composer Repository" module="Eadesigndev_ComposerRepo" sortOrder="80" resource="Eadesigndev_ComposerRepo::composerrepo"/>
+        <add id="Eadesigndev_ComposerRepo::composerrepo_packages" title="Packages" module="Eadesigndev_ComposerRepo" sortOrder="10" parent="Eadesigndev_ComposerRepo::composerrepo" action="composer_packages/index" resource="Eadesigndev_ComposerRepo::composerrepo"/>
+        <add id="Eadesigndev_ComposerRepo::composerrepo_customer_key" title="Customer Key" module="Eadesigndev_ComposerRepo" sortOrder="20" parent="Eadesigndev_ComposerRepo::composerrepo" action="composer_customer_auth/index" resource="Eadesigndev_ComposerRepo::composerrepo"/>
+        <add id="Eadesigndev_ComposerRepo::composerrepo_customer_packages" title="Customer Packages" module="Eadesigndev_ComposerRepo" sortOrder="30" parent="Eadesigndev_ComposerRepo::composerrepo" action="composer_customer_packages/index" resource="Eadesigndev_ComposerRepo::composerrepo"/>
+        <add id="Eadesigndev_ComposerRepo::composerrepo_statistic" title="Installation Statistics" module="Eadesigndev_ComposerRepo" sortOrder="40" parent="Eadesigndev_ComposerRepo::composerrepo" action="composer_statistics/index" resource="Eadesigndev_ComposerRepo::composerrepo"/>
+    </menu>
+</config>
