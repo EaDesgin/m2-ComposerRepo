@@ -45,8 +45,7 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->setActiveMenu(self::ADMIN_RESOURCE);
         $resultPage->addBreadcrumb(__('CMS'), __('CMS'));
         $resultPage->addBreadcrumb(__('Packages'), __('Packages'));
-        $resultPage->addBreadcrumb(__('Customer Key'), __('Customer Key'));
-        $resultPage->getConfig()->getTitle()->prepend(__('Composer Repository'));
+        $resultPage->getConfig()->getTitle()->prepend(__('Composer Packages'));
 
         $dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
         $dataPersistor->clear('cms_page');
