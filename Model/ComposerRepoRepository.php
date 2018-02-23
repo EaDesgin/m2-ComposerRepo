@@ -52,9 +52,9 @@ class ComposerRepoRepository implements ComposerRepositoryInterface
         ComposerRepoFactory $composerRepoFactory,
         ManagerInterface $messageManager
     ) {
-        $this->resource       = $resource;
-        $this->composer         = $composer;
-        $this->composerRepoFactory  = $composerRepoFactory;
+        $this->resource = $resource;
+        $this->composer = $composer;
+        $this->composerRepoFactory = $composerRepoFactory;
         $this->messageManager = $messageManager;
     }
 
@@ -71,7 +71,7 @@ class ComposerRepoRepository implements ComposerRepositoryInterface
             $this->messageManager
                 ->addExceptionMessage(
                     $e,
-                    'There was a error while saving the awb '. $e->getMessage()
+                    'There was a error while saving the package ' . $e->getMessage()
                 );
         }
 
@@ -99,13 +99,13 @@ class ComposerRepoRepository implements ComposerRepositoryInterface
      */
     public function delete(ComposerInterface $composer)
     {
-        $id = $composer->getId();
+        $id = $composer->getEntityId();
         try {
             unset($this->instances[$id]);
             $this->resource->delete($composer);
         } catch (Exception $e) {
             $this->messageManager
-                ->addExceptionMessage($e, 'There was a error while deleting the composer');
+                ->addExceptionMessage($e, 'There was a error while deleting the package');
         }
         unset($this->instances[$id]);
         return true;

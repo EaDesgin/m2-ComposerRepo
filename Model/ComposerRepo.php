@@ -33,14 +33,14 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
         $this->_init(ComposerRepoResourceModel::class);
     }
 
-    public function getId()
+    public function getEntityId()
     {
         return $this->getData(ComposerInterface::ENTITY_ID);
     }
 
-    public function getCreateDate()
+    public function getCreatedAt()
     {
-        return $this->getData(ComposerInterface::CREATE_DATE);
+        return $this->getData(ComposerInterface::CREATED_AT);
     }
 
     public function getStatus()
@@ -93,9 +93,9 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
         $this->setData(ComposerInterface::ENTITY_ID, $entityId);
     }
 
-    public function setCreateDate($createDate)
+    public function setCreatedAt($createdAt)
     {
-        $this->setData(ComposerInterface::CREATE_DATE, $createDate);
+        $this->setData(ComposerInterface::CREATED_AT, $createdAt);
     }
 
     public function setStatus($status)

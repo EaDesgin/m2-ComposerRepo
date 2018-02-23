@@ -90,7 +90,7 @@ abstract class AbstractCollection extends MagentoAbstractCollection
                     $storeIdKey = array_search(Store::DEFAULT_STORE_ID, $storesData[$linkedId], true);
                     if ($storeIdKey !== false) {
                         $stores = $this->storeManager->getStores(false, true);
-                        $storeId = current($stores)->getId();
+                        $storeId = current($stores)->getEntityId();
                         $storeCode = key($stores);
                     } else {
                         $storeId = current($storesData[$linkedId]);
@@ -140,7 +140,7 @@ abstract class AbstractCollection extends MagentoAbstractCollection
     public function performAddStoreFilter($store, $withAdmin = true)
     {
         if ($store instanceof Store) {
-            $store = [$store->getId()];
+            $store = [$store->get()];
         }
 
         if (!is_array($store)) {

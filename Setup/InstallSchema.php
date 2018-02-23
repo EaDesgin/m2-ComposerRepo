@@ -39,11 +39,11 @@ class InstallSchema implements InstallSchemaInterface
                 ],
                 'Entity Id'
             )->addColumn(
-                'createdate',
+                'created_at',
                 Table::TYPE_TIMESTAMP,
                 null,
-                [],
-                'Create date'
+                ['nullable' => false, 'default' => Table::TIMESTAMP_INIT],
+                'Created At'
             )->addColumn(
                 'status',
                 Table::TYPE_INTEGER,

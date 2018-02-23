@@ -12,10 +12,7 @@ use Magento\Customer\Model\Customer;
  */
 class AddButton extends Container
 {
-    /**
-     * @var EntityType
-     */
-    private $entityType;
+
 
     /**
      * AddButton constructor.

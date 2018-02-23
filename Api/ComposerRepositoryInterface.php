@@ -1,6 +1,6 @@
 <?php
 
-namespace Eadesigndev\Awb\Api;
+namespace Eadesigndev\ComposerRepo\Api;
 
 use Eadesigndev\ComposerRepo\Api\Data\ComposerInterface;
 

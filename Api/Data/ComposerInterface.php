@@ -9,7 +9,7 @@ namespace Eadesigndev\ComposerRepo\Api\Data;
 interface ComposerInterface
 {
     const ENTITY_ID = 'entity_id';
-    const CREATE_DATE = 'createdate';
+    const CREATED_AT = 'created_at';
     const STATUS = 'status';
     const PRODUCT_ID = 'product_id';
     const NAME = 'name';
@@ -21,9 +21,9 @@ interface ComposerInterface
     const BUNDLED_PACKAGE = 'bundled_package';
 
 
-    public function getId();
+    public function getEntityId();
 
-    public function getCreateDate();
+    public function getCreatedAt();
 
     public function getStatus();
 
@@ -45,9 +45,9 @@ interface ComposerInterface
 
 
 
-    public function setId($entityId);
+    public function setEntityId($entityId);
 
-    public function setCreateDate($createDate);
+    public function setCreatedAt($createdAt);
 
     public function setStatus($status);
 

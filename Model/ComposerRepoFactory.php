@@ -22,7 +22,7 @@ class ComposerRepoFactory implements ComposerRepoFactoryInterface
     private $instanceName = null;
 
     /**
-     * AwbFactory constructor.
+     * ComposerRepo constructor.
      * @param ObjectManagerInterface $objectManager
      * @param $instanceName
      */

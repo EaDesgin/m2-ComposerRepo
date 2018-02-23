@@ -2,11 +2,11 @@
 
 namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 
-//use Eadesigndev\Awb\Api\AwbRepositoryInterface;
-//use Eadesigndev\Awb\Model\AwbFactory;
+use Eadesigndev\ComposerRepo\Api\ComposerRepositoryInterface;
+use Eadesigndev\ComposerRepo\Model\ComposerRepoFactory;
 use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
-//use Magento\Backend\Model\Session;
+use Magento\Backend\Model\Session;
 use Magento\Framework\View\Result\PageFactory;
 
 class Edit extends \Magento\Backend\App\Action
@@ -23,9 +23,9 @@ class Edit extends \Magento\Backend\App\Action
      */
     protected $resultPageFactory;
 
-//    private $awbRepository;
-//
-//    private $awbFactory;
+    private $composerRepoRepository;
+
+    private $composerRepoFactory;
 
     private $registry;
 
@@ -34,13 +34,13 @@ class Edit extends \Magento\Backend\App\Action
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-//        AwbRepositoryInterface $awbRepository,
-//        AwbFactory $awbFactory,
+        ComposerRepositoryInterface $composerRepoRepository,
+        ComposerRepoFactory $composerRepoFactory,
         Registry $registry
     ) {
         $this->resultPageFactory = $resultPageFactory;
-//        $this->awbRepository  = $awbRepository;
-//        $this->awbFactory     = $awbFactory;
+        $this->composerRepoRepository  = $composerRepoRepository;
+        $this->composerRepoFactory     = $composerRepoFactory;
         $this->registry          = $registry;
         $this->session           = $context->getSession();
         parent::__construct($context);
@@ -53,24 +53,24 @@ class Edit extends \Magento\Backend\App\Action
      */
     public function execute()
     {
-//        $id = $this->getRequest()->getParam('entity_id');
-//        if ($id) {
-//            $model = $this->awbRepository->getById($id);
-//            if (!$model->getId()) {
-//                $this->messageManager->addErrorMessage(__('This field no longer exists.'));
-//                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
-//                $resultRedirect = $this->resultFactory->create();
-//                return $resultRedirect->setPath('*/*/');
-//            }
-//        } else {
-//            $model = $this->awbFactory->create();
-//        }
-//        /** @var Session $data */
-//        $data = $this->session->getFormData(true);
-//        if (!empty($data)) {
-//            $model->setData($data);
-//        }
-//        $this->registry->register('awb_data', $model);
+        $id = $this->getRequest()->getParam('entity_id');
+        if ($id) {
+            $model = $this->composerRepoRepository->getById($id);
+            if (!$model->getEntityId()) {
+                $this->messageManager->addErrorMessage(__('This field no longer exists.'));
+                /** \Magento\Backend\Model\View\Result\Redirect $resultRedirect */
+                $resultRedirect = $this->resultFactory->create();
+                return $resultRedirect->setPath('*/*/');
+            }
+        } else {
+            $model = $this->composerRepoFactory->create();
+        }
+        /** @var Session $data */
+        $data = $this->session->getFormData(true);
+        if (!empty($data)) {
+            $model->setData($data);
+        }
+        $this->registry->register('composer_data', $model);
 
 
 
