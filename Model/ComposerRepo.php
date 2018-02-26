@@ -88,7 +88,63 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
         return $this->getData(ComposerInterface::BUNDLED_PACKAGE);
     }
 
-    public function setId($entityId)
+    public function getDefault()
+    {
+        return $this->getData(ComposerInterface::DEFAULT);
+    }
+
+    public function getCustomerId()
+    {
+        return $this->getData(ComposerInterface::CUSTOMER_ID);
+    }
+
+    public function getAuthKey()
+    {
+        return $this->getData(ComposerInterface::AUTH_KEY);
+    }
+
+    public function getAuthSecret()
+    {
+        return $this->getData(ComposerInterface::AUTH_SECRET);
+    }
+
+    public function getOrderId()
+    {
+        return $this->getData(ComposerInterface::ORDER_ID);
+    }
+
+    public function getPackageId()
+    {
+        return $this->getData(ComposerInterface::PACKAGE_ID);
+    }
+
+    public function getLastAllowedVersion()
+    {
+        return $this->getData(ComposerInterface::LAST_ALLOWED_VERSION);
+    }
+
+    public function getLastAllowedDate()
+    {
+        return $this->getData(ComposerInterface::LAST_ALLOWED_DATE);
+    }
+
+    public function getVersionId()
+    {
+        return $this->getData(ComposerInterface::VERSION_ID);
+    }
+
+    public function getRemoteIp()
+    {
+        return $this->getData(ComposerInterface::REMOTE_IP);
+    }
+
+    public function getFile()
+    {
+        return $this->getData(ComposerInterface::FILE);
+    }
+
+
+    public function setEntityId($entityId)
     {
         $this->setData(ComposerInterface::ENTITY_ID, $entityId);
     }
@@ -142,4 +198,60 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
     {
         $this->setData(ComposerInterface::BUNDLED_PACKAGE, $bundledPackage);
     }
+
+    public function setDefault($default)
+    {
+        $this->setData(ComposerInterface::DEFAULT, $default);
+    }
+
+    public function setCustomerId($customerId)
+    {
+        $this->setData(ComposerInterface::CUSTOMER_ID, $customerId);
+    }
+
+    public function setAuthKey($authKey)
+    {
+        $this->setData(ComposerInterface::AUTH_KEY, $authKey);
+    }
+
+    public function setAuthSecret($authSecret)
+    {
+        $this->setData(ComposerInterface::AUTH_SECRET, $authSecret);
+    }
+
+    public function setOrderId($orderId)
+    {
+        $this->setData(ComposerInterface::ORDER_ID, $orderId);
+    }
+
+    public function setPackageId($packageId)
+    {
+        $this->setData(ComposerInterface::PACKAGE_ID, $packageId);
+    }
+
+    public function setLastAllowedVersion($lastAllowedVersion)
+    {
+        $this->setData(ComposerInterface::LAST_ALLOWED_VERSION, $lastAllowedVersion);
+    }
+
+    public function setLastAllowedDate($lastAllowedDate)
+    {
+        $this->setData(ComposerInterface::LAST_ALLOWED_DATE, $lastAllowedDate);
+    }
+
+    public function setVersionId($versionId)
+    {
+        $this->setData(ComposerInterface::VERSION_ID, $versionId);
+    }
+
+    public function setRemoteIp($remoteIp)
+    {
+        $this->setData(ComposerInterface::REMOTE_IP, $remoteIp);
+    }
+
+    public function setFile($file)
+    {
+        $this->setData(ComposerInterface::FILE, $file);
+    }
+
 }
