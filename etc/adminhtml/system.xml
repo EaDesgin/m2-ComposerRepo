@@ -7,11 +7,71 @@
             <tab>eadesign_extensions</tab>
             <resource>Eadesigndev_ComposerRepo::configuration</resource>
             <group id="composerrepo" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Composer Repo</label>
-                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Enabled</label>
-                    <comment>If enabled, awb will be customized by your settings made at "Manage AWB List".</comment>
+                <label>Logging</label>
+                <field id="enabled" translate="label comment" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enabled Logging</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+            <group id="composerrepo_config" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Configuration</label>
+                <field id="repo_name" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Repository Name</label>
+                    <comment>Single word in lowercase, used to identify the repository in composer</comment>
+                </field>
+                <field id="repo_url" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Repository URL</label>
+                </field>
+                <field id="dev_master" translate="label comment" type="select" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Include dev-master</label>
+                    <comment>Include dev-master as downloadable packge</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="update" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Update period (months)</label>
+                    <comment>Period (in months) for free updates to newer version, leave empty for unlimited</comment>
+                </field>
+                <field id="email" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>E-mail active</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="email_template" translate="label comment" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>E-mail Template</label>
+                    <source_model>Eadesigndev\ComposerRepo\Model\Sources\EmailTemplate</source_model>
+                </field>
+                <field id="bbc" translate="label comment" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Copy To (BCC)</label>
+                </field>
+                <field id="email_sender" translate="label comment" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Email Sender</label>
+                    <source_model>Eadesigndev\ComposerRepo\Model\Sources\EmailSender</source_model>
+                </field>
+            </group>
+            <group id="composerrepo_satis" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Satis Configuration</label>
+                <field id="config_path" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Satis command path</label>
+                </field>
+                <field id="command_path" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Satis config path</label>
+                </field>
+                <field id="name_repo" translate="label comment" type="text" sortOrder="3" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Name</label>
+                </field>
+                <field id="home_url" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Homepage URL</label>
+                </field>
+                <field id="output_dir" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Output Directory</label>
+                </field>
+            </group>
+            <group id="composerrepo_satis_arhive" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Satis Archive Configuration</label>
+                <field id="format" translate="label comment" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Format (zip or tar)</label>
+                </field>
+                <field id="abs_dir" translate="label comment" type="text" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Absolute Directory</label>
                 </field>
             </group>
         </section>
