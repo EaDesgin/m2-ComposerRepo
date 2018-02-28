@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
             <item name="provider" xsi:type="string">xtea_fields_listing.fields_data_source</item>
@@ -60,7 +61,8 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.fields_columns</item>
+                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.fields_columns
+                        </item>
                     </item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
                     <item name="displayArea" xsi:type="string">dataGridActions</item>
@@ -73,9 +75,13 @@
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="provider" xsi:type="string">xtea_fields_listing.fields_data_source</item>
-                    <item name="chipsProvider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters_chips</item>
+                    <item name="chipsProvider" xsi:type="string">
+                        xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters_chips
+                    </item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">
+                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                        </item>
                         <item name="namespace" xsi:type="string">current.search</item>
                     </item>
                 </item>
@@ -87,13 +93,19 @@
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
                     <item name="dataScope" xsi:type="string">filters</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">
+                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                        </item>
                         <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
                     <item name="childDefaults" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters</item>
+                        <item name="provider" xsi:type="string">
+                            xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                        </item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks:current.columns.${ $.index }.visible</item>
+                            <item name="visible" xsi:type="string">
+                                xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks:current.columns.${ $.index }.visible
+                            </item>
                         </item>
                     </item>
                 </item>
@@ -104,7 +116,9 @@
                         <item name="dataScope" xsi:type="string">entity_id</item>
                         <item name="label" xsi:type="string" translate="true">ID</item>
                         <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters</item>
+                            <item name="provider" xsi:type="string">
+                                xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                            </item>
                         </item>
                     </item>
                 </argument>
@@ -168,7 +182,9 @@
                         <item name="dataScope" xsi:type="string">creation_time</item>
                         <item name="label" xsi:type="string" translate="true">Created</item>
                         <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters</item>
+                            <item name="provider" xsi:type="string">
+                                xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                            </item>
                         </item>
                     </item>
                 </argument>
@@ -199,7 +215,9 @@
                         <item name="dataScope" xsi:type="string">update_time</item>
                         <item name="label" xsi:type="string" translate="true">Modified</item>
                         <item name="childDefaults" xsi:type="array">
-                            <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters</item>
+                            <item name="provider" xsi:type="string">
+                                xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                            </item>
                         </item>
                     </item>
                 </argument>
@@ -226,13 +244,16 @@
             </filterRange>
             <filterSelect name="store_id">
                 <argument name="optionsProvider" xsi:type="configurableObject">
-                    <argument name="class" xsi:type="string">Magento\Cms\Ui\Component\Listing\Column\Cms\Options</argument>
+                    <argument name="class" xsi:type="string">Magento\Cms\Ui\Component\Listing\Column\Cms\Options
+                    </argument>
                 </argument>
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
                         <item name="provider" xsi:type="string">${ $.parentName }</item>
                         <item name="imports" xsi:type="array">
-                            <item name="visible" xsi:type="string">componentType = column, index = ${ $.index }:visible</item>
+                            <item name="visible" xsi:type="string">componentType = column, index =
+                                ${ $.index }:visible
+                            </item>
                         </item>
                         <item name="dataScope" xsi:type="string">store_id</item>
                         <item name="label" xsi:type="string" translate="true">Store View</item>
@@ -244,7 +265,9 @@
         <massaction name="listing_massaction">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="selectProvider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.fields_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">
+                        xtea_fields_listing.xtea_fields_listing.fields_columns.ids
+                    </item>
                     <item name="indexField" xsi:type="string">entity_id</item>
                 </item>
             </argument>
@@ -256,7 +279,9 @@
                         <item name="url" xsi:type="url" path="eadesign_pdf/templates/massDelete"/>
                         <item name="confirm" xsi:type="array">
                             <item name="title" xsi:type="string" translate="true">Delete items</item>
-                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete selected items?</item>
+                            <item name="message" xsi:type="string" translate="true">Are you sure you wan't to delete
+                                selected items?
+                            </item>
                         </item>
                     </item>
                 </argument>
@@ -284,10 +309,14 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">
+                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                        </item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
-                    <item name="selectProvider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.fields_columns.ids</item>
+                    <item name="selectProvider" xsi:type="string">
+                        xtea_fields_listing.xtea_fields_listing.fields_columns.ids
+                    </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
                         <item name="20" xsi:type="array">
@@ -319,12 +348,16 @@
         <argument name="data" xsi:type="array">
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">
-                    <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks</item>
+                    <item name="provider" xsi:type="string">
+                        xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                    </item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.fields_columns.actions</item>
+                        <item name="provider" xsi:type="string">
+                            xtea_fields_listing.xtea_fields_listing.fields_columns.actions
+                        </item>
                         <item name="target" xsi:type="string">applyAction</item>
                         <item name="params" xsi:type="array">
                             <item name="0" xsi:type="string">edit</item>
@@ -333,7 +366,9 @@
                     </item>
                     <item name="controlVisibility" xsi:type="boolean">true</item>
                     <item name="storageConfig" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks</item>
+                        <item name="provider" xsi:type="string">
+                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                        </item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
                         <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>
                     </item>
@@ -371,8 +406,12 @@
         </column>
         <column name="status">
             <argument name="data" xsi:type="array">
+                <item name="options" xsi:type="object">Eadesigndev\ComposerRepo\Model\Sources\ActiveType</item>
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
+                    <item name="filter" xsi:type="string">select</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/select</item>
+                    <item name="editor" xsi:type="string">select</item>
+                    <item name="dataType" xsi:type="string">select</item>
                     <item name="label" xsi:type="string" translate="true">Status</item>
                 </item>
             </argument>
@@ -393,7 +432,7 @@
                 </item>
             </argument>
         </column>
-        <column name="bundled_package" >
+        <column name="bundled_package">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
@@ -452,3 +491,5 @@
 
     </columns>
 </listing>
+
+

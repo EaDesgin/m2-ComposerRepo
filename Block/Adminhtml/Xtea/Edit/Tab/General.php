@@ -7,6 +7,7 @@ use Magento\Backend\Block\Template\Context;
 use Magento\Backend\Block\Widget\Tab\TabInterface;
 use Eadesigndev\ComposerRepo\Model\Sources\InputType;
 use Eadesigndev\ComposerRepo\Model\Sources\PackageType;
+use Eadesigndev\ComposerRepo\Model\Sources\ActiveType;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Phrase;
@@ -22,6 +23,11 @@ use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
  */
 class General extends Generic implements TabInterface
 {
+    /**
+     * @var PackageType
+     */
+    private $activeType;
+
     /**
      * @var PackageType
      */
@@ -55,6 +61,7 @@ class General extends Generic implements TabInterface
         SystemStore $systemStore,
         InputType $inputType,
         PackageType $packageType,
+        ActiveType $activeType,
         array $data = []
     ) {
         $this->registry = $registry;
@@ -62,9 +69,9 @@ class General extends Generic implements TabInterface
         $this->systemStore = $systemStore;
         $this->packageType = $packageType;
         $this->inputType = $inputType;
+        $this->activeType = $activeType;
 
-
-        parent::__construct($context, $registry, $formFactory, $data, $inputType, $packageType);
+        parent::__construct($context, $registry, $formFactory, $data, $inputType, $packageType, $activeType);
     }
 
     /**
@@ -100,6 +107,7 @@ class General extends Generic implements TabInterface
                 'required' => true,
             ]
         );
+        $types = $this->activeType->getAvailable();
 
         $fieldSet->addField(
             'status',
@@ -108,7 +116,7 @@ class General extends Generic implements TabInterface
                 'name' => 'status',
                 'label' => __('Status'),
                 'title' => __('Status'),
-                'values' => $this->yesNo->toOptionArray(),
+                'values' => $types,
                 'required' => true,
             ]
         );
