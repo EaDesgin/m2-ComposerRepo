@@ -8,13 +8,13 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
- * Class Packages
+ * Class CustomerPackages
  * @package Eadesigndev\ComposerRepo\Model\ResourceModel\Customer
  */
-class Packages extends AbstractDb
+class CustomerPackages extends AbstractDb
 {
     /**
-     * Packages constructor.
+     * CustomerPackages constructor.
      * @param Context $context
      * @param string|null $connectionName
      */
@@ -30,7 +30,7 @@ class Packages extends AbstractDb
 
     public function _construct()
     {
-        $this->_init(InstallSchema::TABLE, ComposerInterface::ENTITY_ID);
+        $this->_init(InstallSchema::TABLE_CUSTOMER_PACKAGE, ComposerInterface::ENTITY_ID);
     }
 
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
