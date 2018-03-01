@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_order_invoice_pay">
+        <observer instance="Eadesigndev\ComposerRepo\Observer\Sales\SalesOrderInvoicePay"
+                  name="Eadesigndev\ComposerRepo\Observer\Sales\SalesOrderInvoicePay"/>
+    </event>
+</config>
