@@ -35,9 +35,9 @@ class CustomerPackages extends AbstractDb
 
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
-        if (!$object->getId()) {
-            $object->setCreatedate(now());
-        }
+//        if (!$object->getId()) {
+//            $object->setCreatedate(now());
+//        }
 
         return parent::_beforeSave($object);
     }
