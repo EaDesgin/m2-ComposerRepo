@@ -2,7 +2,7 @@
 
 namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 
-use Eadesigndev\ComposerRepo\Api\ComposerRepositoryInterface;
+use Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface;
 use Eadesigndev\ComposerRepo\Model\ComposerRepoFactory;
 use Magento\Framework\Registry;
 use Magento\Backend\App\Action\Context;
@@ -34,7 +34,7 @@ class Edit extends \Magento\Backend\App\Action
     public function __construct(
         Context $context,
         PageFactory $resultPageFactory,
-        ComposerRepositoryInterface $composerRepoRepository,
+        ComposerRepoRepositoryInterface $composerRepoRepository,
         ComposerRepoFactory $composerRepoFactory,
         Registry $registry
     ) {

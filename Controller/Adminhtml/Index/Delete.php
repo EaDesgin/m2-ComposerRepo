@@ -1,7 +1,7 @@
 <?php
 namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 
-use Eadesigndev\ComposerRepo\Api\ComposerRepositoryInterface;
+use Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface;
 use Eadesigndev\ComposerRepo\Model\ComposerRepo;
 use Eadesigndev\ComposerRepo\Model\ComposerRepoFactory;
 use Magento\Backend\App\Action;
@@ -21,7 +21,7 @@ class Delete extends Action
     public function __construct(
         Context $context,
         PageFactory $resultFactory,
-        ComposerRepositoryInterface $composerRepoRepository,
+        ComposerRepoRepositoryInterface $composerRepoRepository,
         ComposerRepoFactory $composerRepoFactory
     ) {
         $this->resultFactory = $resultFactory;
