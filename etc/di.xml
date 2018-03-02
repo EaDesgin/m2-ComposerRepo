@@ -4,8 +4,12 @@
     <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepo" />
 
-    <preference for="Eadesigndev\ComposerRepo\Api\ComposerRepositoryInterface"
+    <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
+
+    <preference for="Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepoRepository" />
+
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
