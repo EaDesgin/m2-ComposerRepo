@@ -4,11 +4,15 @@ namespace Eadesigndev\ComposerRepo\Observer\Sales;
 
 use Eadesigndev\ComposerRepo\Model\Packages;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackages;
+use Eadesigndev\ComposerRepo\Model\ComposerRepoRepository;
+use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuth;
+use Eadesigndev\ComposerRepo\Helper\Data;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Invoice\Item;
 use Psr\Log\LoggerInterface;
 
 
@@ -18,7 +22,10 @@ use Psr\Log\LoggerInterface;
  */
 class SalesOrderInvoicePay implements ObserverInterface
 {
-    const SCOPE_STORE = 'eadesign_composerrepo/configuration/update_period';
+    /**
+     * @var CustomerAuth
+     */
+    private $auth;
     /**
      * @var CustomerPackages
      */
@@ -32,28 +39,45 @@ class SalesOrderInvoicePay implements ObserverInterface
      */
     private $logger;
     /**
-     * @var ScopeConfigInterface
+     * @var Data
      */
-    private $scopeConfig;
+    private $dataHelper;
+    /**
+     * @var ComposerRepoRepository
+     */
+    private $composerRepoRepository;
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteria;
 
     /**
      * SalesOrderInvoicePay constructor.
-     * @param LoggerInterface $logger
      * @param Packages $packages
+     * @param Data $dataHelper
+     * @param CustomerAuth $auth
+     * @param LoggerInterface $logger
+     * @param SearchCriteriaBuilder $searchCriteria
      * @param CustomerPackages $customerPackages
+     * @param ComposerRepoRepository $composerRepoRepository
      */
 
     public function __construct(
-        LoggerInterface $logger,
-        ScopeConfigInterface $scopeConfig,
         Packages $packages,
-        CustomerPackages $customerPackages
-    )
-    {
-        $this->logger = $logger;
-        $this->scopeConfig = $scopeConfig;
-        $this->packages = $packages;
-        $this->customerPackages = $customerPackages;
+        Data $dataHelper,
+        CustomerAuth $auth,
+        LoggerInterface $logger,
+        SearchCriteriaBuilder $searchCriteria,
+        CustomerPackages $customerPackages,
+        ComposerRepoRepository $composerRepoRepository
+    ) {
+        $this->logger                 = $logger;
+        $this->dataHelper             = $dataHelper;
+        $this->packages               = $packages;
+        $this->auth                   = $auth;
+        $this->customerPackages       = $customerPackages;
+        $this->searchCriteria         = $searchCriteria;
+        $this->composerRepoRepository = $composerRepoRepository;
     }
 
     /**
@@ -63,8 +87,7 @@ class SalesOrderInvoicePay implements ObserverInterface
      */
     public function execute(
         Observer $observer
-    )
-    {
+    ) {
         $event = $observer->getEvent();
         /** @var Invoice $invoice */
         $invoice = $event->getInvoice();
@@ -74,8 +97,17 @@ class SalesOrderInvoicePay implements ObserverInterface
 
         $packageModel = $this->packages;
         $installPackages = [];
+
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder->addFilter('product_id',28, 'eq')->create();
+        $items = $this->composerRepoRepository->getList($searchCriteria);
+        $items = $items->getItems();
+
+
+        /** @var Item $item */
         foreach ($invoice->getItemsCollection() as $item) {
             $package = $packageModel->load($item->getProductId(), 'product_id');
+
 
             if ($package->getId()) {
                 $installPackages[] = $package;
@@ -87,18 +119,18 @@ class SalesOrderInvoicePay implements ObserverInterface
                     ->setPackageId($package->getId())
                     ->setLastAllowedVersion($package->getVersion());
 
-                if ($period = $this->_scopeConfig->getValue(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)) ;
-                {
-                    $endDate = new DateTime();
-                    $endDate->add(new DateInterval('P' . intval($period) . 'M'));
-
-                    $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
-                }
-                try {
-                    $customerPackage->save();
-                } catch (\Exception $e) {
-                    $this->logger->info($e->getMessage());
-                }
+//                if ($period = $this->dataHelper->hasConfig(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)) ;
+//                {
+//                    $endDate = new DateTime();
+//                    $endDate->add(new DateInterval('P' . intval($period) . 'M'));
+//
+//                    $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
+//                }
+//                try {
+//                    $customerPackage->save();
+//                } catch (\Exception $e) {
+//                    $this->logger->info($e->getMessage());
+//                }
             }
         }
         if (!count($installPackages)) {
