@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
+    <router id="admin">
+        <route id="composer_packages" frontName="composer_packages">
+            <module name="Eadesigndev_ComposerRepo" before="Magento_Backend"/>
+        </route>
+        <route id="composer_customer_auth" frontName="composer_customer_auth">
+            <module name="Eadesigndev_ComposerRepo" before="Magento_Backend"/>
+        </route>
+        <route id="composer_customer_packages" frontName="composer_customer_packages">
+            <module name="Eadesigndev_ComposerRepo" before="Magento_Backend"/>
+        </route>
+        <route id="composer_statistics" frontName="composer_statistics">
+            <module name="Eadesigndev_ComposerRepo" before="Magento_Backend"/>
+        </route>
+    </router>
+</config>
