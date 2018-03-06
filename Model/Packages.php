@@ -2,6 +2,7 @@
 
 namespace Eadesigndev\ComposerRepo\Model;
 
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Packages as ResourcePackages;
 use Magento\Framework\Model\AbstractModel;
 
 class Packages extends AbstractModel
@@ -17,7 +18,7 @@ class Packages extends AbstractModel
 
     protected function _construct()
     {
-        $this->_init('Eadesigndev\ComposerRepo\Model\ResourceModel\Packages');
+        $this->_init(ResourcePackages::class);
     }
 
     public function getByPackageName($name)

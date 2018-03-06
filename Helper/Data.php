@@ -15,6 +15,8 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Data extends AbstractHelper
 {
+    const STORE_CONFIG = 'eadesign_composerrepo/composerrepo_config/update_period';
+
     /**
      * @var ScopeConfigInterface
      */
@@ -35,11 +37,16 @@ class Data extends AbstractHelper
      * @param string $configPath
      * @return bool
      */
-    public function hasConfig($configPath)
+    public function getConfig($configPath)
     {
         return $this->config->getValue(
             $configPath,
             ScopeInterface::SCOPE_STORE
         );
+    }
+
+    public function period($storeConfig = self::STORE_CONFIG){
+
+        return $this->getConfig($storeConfig);
     }
 }

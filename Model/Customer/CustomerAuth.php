@@ -2,6 +2,7 @@
 
 namespace Eadesigndev\ComposerRepo\Model\Customer;
 
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth as ResourceCustomerAuth;
 use Magento\Framework\Model\AbstractModel;
 
 class CustomerAuth extends AbstractModel
@@ -20,6 +21,6 @@ class CustomerAuth extends AbstractModel
 
     protected function _construct()
     {
-        $this->_init('Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth');
+        $this->_init(ResourceCustomerAuth::class);
     }
 }

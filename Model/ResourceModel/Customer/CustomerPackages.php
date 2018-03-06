@@ -32,13 +32,4 @@ class CustomerPackages extends AbstractDb
     {
         $this->_init(InstallSchema::TABLE_CUSTOMER_PACKAGE, ComposerInterface::ENTITY_ID);
     }
-
-    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-//        if (!$object->getId()) {
-//            $object->setCreatedate(now());
-//        }
-
-        return parent::_beforeSave($object);
-    }
 }
