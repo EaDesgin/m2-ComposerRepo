@@ -32,15 +32,4 @@ class CustomerAuth extends AbstractDb
     {
         $this->_init(InstallSchema::TABLE_AUTH, ComposerInterface::ENTITY_ID);
     }
-
-//    protected function generateUniqueAuthKey(\Magento\Framework\Model\AbstractModel $object)
-//    {
-//        while (($newKey = $this->getUniqueAuthKey()) === false) {
-//            // Key not unique, try another one
-//        }
-//
-//        $object->setAuthKey($newKey)
-//            ->setAuthSecret(Mage::helper('core')->getRandomString(32));
-//        return $object;
-//    }
 }

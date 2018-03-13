@@ -4,11 +4,11 @@ namespace Eadesigndev\ComposerRepo\Model\Customer;
 
 use Eadesigndev\ComposerRepo\Api\Data\ComposerInterface;
 use Eadesigndev\ComposerRepo\Api\CustomerAuthRepositoryInterface;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Collection;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionFactory;
-use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionAuth;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionAuthFactory;
 use Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterfaceFactory;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth as CustomerAuthResourceModel;
+use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth as CustomerAuthResource;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException as Exception;
 use Magento\Framework\Message\ManagerInterface;
@@ -24,7 +24,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
      */
     private $instances = [];
     /**
-     * @var CustomerAuthResourceModel
+     * @var CustomerAuthResource
      */
     private $resource;
     /**
@@ -40,9 +40,9 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
      */
     private $messageManager;
     /**
-     * @var CollectionFactory
+     * @var CollectionAuthFactory
      */
-    private $collectionFactory;
+    private $collectionAuthFactory;
     /**
      * @var ComposerSearchResultsInterfaceFactory
      */
@@ -50,24 +50,24 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
 
     /**
      * CustomerAuthRepository constructor.
-     * @param CustomerAuthResourceModel $resource
+     * @param CustomerAuthResource $resource
      * @param ComposerInterface $composer
      * @param CustomerAuthFactory $customerAuthFactory
      * @param ManagerInterface $messageManager
-     * @param CollectionFactory $collectionFactory
+     * @param CollectionAuthFactory $collectionAuthFactory
      * @param ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory
      */
     public function __construct(
-        CustomerAuthResourceModel $resource,
+        CustomerAuthResource $resource,
         ComposerInterface $composer,
         CustomerAuthFactory $customerAuthFactory,
         ManagerInterface $messageManager,
-        CollectionFactory $collectionFactory,
+        CollectionAuthFactory $collectionAuthFactory,
         ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory
     ) {
         $this->resource                              = $resource;
         $this->composer                              = $composer;
-        $this->collectionFactory                     = $collectionFactory;
+        $this->collectionAuthFactory                    = $collectionAuthFactory;
         $this->customerAuthFactory                   = $customerAuthFactory;
         $this->messageManager                        = $messageManager;
         $this->composerSearchResultsInterfaceFactory = $composerSearchResultsInterfaceFactory;
@@ -135,7 +135,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
     }
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->collectionFactory->create();
+        $collection = $this->collectionAuthFactory->create();
 
         $this->addFiltersToCollection($searchCriteria, $collection);
         $this->addSortOrdersToCollection($searchCriteria, $collection);
@@ -145,7 +145,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
 
         return $this->buildSearchResult($searchCriteria, $collection);
     }
-    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             $fields = $conditions = [];
@@ -157,7 +157,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
         }
     }
 
-    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
     {
         foreach ((array) $searchCriteria->getSortOrders() as $sortOrder) {
             $direction = $sortOrder->getDirection() == SortOrder::SORT_ASC ? 'asc' : 'desc';
@@ -165,13 +165,13 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
         }
     }
 
-    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
     {
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->setCurPage($searchCriteria->getCurrentPage());
     }
 
-    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
     {
         $searchResults = $this->composerSearchResultsInterfaceFactory->create();
 
