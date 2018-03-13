@@ -3,10 +3,12 @@
 namespace Eadesigndev\ComposerRepo\Observer\Sales;
 
 use Eadesigndev\ComposerRepo\Model\Packages;
+use Eadesigndev\ComposerRepo\Model\ComposerRepoRepository;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackages;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository;
-use Eadesigndev\ComposerRepo\Model\ComposerRepoRepository;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuth;
+use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
+use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
 use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
 use Eadesigndev\ComposerRepo\Helper\Data;
 use Magento\Framework\Event\Observer;
@@ -25,6 +27,10 @@ use Psr\Log\LoggerInterface;
 class SalesOrderInvoicePay implements ObserverInterface
 {
     /**
+     * @var Packages
+     */
+    private $packages;
+    /**
      * @var CustomerPackagesRepository
      */
     private $customerPackagesRepository;
@@ -32,19 +38,23 @@ class SalesOrderInvoicePay implements ObserverInterface
      * @var CustomerPackagesFactory
      */
     private $customerPackagesFactory;
-
     /**
      * @var CustomerAuth
      */
-    private $auth;
+    private $customerAuth;
+    /**
+     * @var CustomerAuthFactory
+     */
+    private $customerAuthFactory;
+    /**
+     * @var CustomerAuthRepository
+     */
+    private $customerAuthRepository;
     /**
      * @var CustomerPackages
      */
     private $customerPackages;
-    /**
-     * @var Packages
-     */
-    private $packages;
+
     /**
      * @var LoggerInterface
      */
@@ -65,8 +75,10 @@ class SalesOrderInvoicePay implements ObserverInterface
     /**
      * SalesOrderInvoicePay constructor.
      * @param Packages $packages
+     * @param CustomerAuth $customerAuth
+     * @param CustomerAuthFactory $customerAuthFactory
+     * @param CustomerAuthRepository $customerAuthRepository
      * @param Data $dataHelper
-     * @param CustomerAuth $auth
      * @param LoggerInterface $logger
      * @param SearchCriteriaBuilder $searchCriteria
      * @param CustomerPackages $customerPackages
@@ -78,18 +90,23 @@ class SalesOrderInvoicePay implements ObserverInterface
     public function __construct(
         Packages $packages,
         Data $dataHelper,
-        CustomerAuth $auth,
+        CustomerAuth $customerAuth,
+        CustomerAuthFactory $customerAuthFactory,
+        CustomerAuthRepository $customerAuthRepository,
         LoggerInterface $logger,
         SearchCriteriaBuilder $searchCriteria,
         CustomerPackages $customerPackages,
         CustomerPackagesRepository $customerPackagesRepository,
         CustomerPackagesFactory $customerPackagesFactory,
         ComposerRepoRepository $composerRepoRepository
-    ) {
+    )
+    {
         $this->logger = $logger;
         $this->dataHelper = $dataHelper;
         $this->packages = $packages;
-        $this->auth = $auth;
+        $this->customerAuth = $customerAuth;
+        $this->customerAuthRepository = $customerAuthRepository;
+        $this->customerAuthFactory = $customerAuthFactory;
         $this->customerPackages = $customerPackages;
         $this->searchCriteria = $searchCriteria;
         $this->customerPackagesRepository = $customerPackagesRepository;
@@ -104,7 +121,8 @@ class SalesOrderInvoicePay implements ObserverInterface
      */
     public function execute(
         Observer $observer
-    ) {
+    )
+    {
         $event = $observer->getEvent();
         /** @var Invoice $invoice */
         $invoice = $event->getInvoice();
@@ -150,5 +168,17 @@ class SalesOrderInvoicePay implements ObserverInterface
 
         $this->customerPackagesRepository->save($customerPackage);
 
+        $authKey = $this->dataHelper->generateUniqueAuthKey();
+        $secretAuthKey = $this->dataHelper->generateSecretAuthKey();
+
+        $customerKey = $this->customerAuthFactory->create();
+        $customerKey->setStatus(1);
+        $customerKey->setDefault(1);
+        $customerKey->setCustomerId($customerId);
+        $customerKey->setDescription('Auto generated key');
+        $customerKey->setAuthKey($authKey);
+        $customerKey->setAuthSecret($secretAuthKey);
+
+        $this->customerAuthRepository->save($customerKey);
     }
 }
