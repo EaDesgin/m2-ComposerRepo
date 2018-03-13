@@ -10,10 +10,29 @@
     <preference for="Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepoRepository" />
 
+    <preference for="Eadesigndev\ComposerRepo\Api\CustomerAuthRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository" />
+
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="fields_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="auth_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionAuth</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="package_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionAuth</item>
             </argument>
         </arguments>
     </type>
@@ -24,6 +43,15 @@
             <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\ComposerRepo</argument>
+        </arguments>
+    </type>
+
+    <type name="Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionAuth">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">eadesign_composerrepo_customer_auth</argument>
+            <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth</argument>
         </arguments>
     </type>
 
