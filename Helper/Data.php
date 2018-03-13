@@ -6,6 +6,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\Math\Random;
 
 /**
  * Handles the config and other settings
@@ -23,14 +24,21 @@ class Data extends AbstractHelper
     public $config;
 
     /**
+     * @var Random
+     */
+    private $randomString;
+
+    /**
      * Data constructor.
      * @param Context $context
      */
     public function __construct(
-        Context $context
+        Context $context,
+        Random $randomString
     ) {
         $this->config = $context->getScopeConfig();
         parent::__construct($context);
+        $this->randomString = $randomString;
     }
 
     /**
@@ -45,8 +53,22 @@ class Data extends AbstractHelper
         );
     }
 
-    public function period($storeConfig = self::STORE_CONFIG){
-
+    public function period($storeConfig = self::STORE_CONFIG)
+    {
         return $this->getConfig($storeConfig);
+    }
+
+    public function generateUniqueAuthKey($lenght = 32)
+    {
+        $authKey = $this->randomString;
+
+        return $authKey->getRandomString($lenght);
+    }
+
+    public function generateSecretAuthKey($lenght = 32)
+    {
+        $secrteAuthKey = $this->randomString;
+
+        return $secrteAuthKey->getRandomString($lenght);
     }
 }
