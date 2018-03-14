@@ -362,27 +362,36 @@
                 </item>
             </argument>
         </column>
-        <column name="description">
+        <column name="order_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
-                    <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Description</item>
+                    <item name="filter" xsi:type="string">textRange</item>
+                    <item name="label" xsi:type="string" translate="true">Order ID</item>
                 </item>
             </argument>
         </column>
-        <column name="auth_key">
+        <column name="package_id">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Key</item>
+                    <item name="label" xsi:type="string" translate="true">Package</item>
                 </item>
             </argument>
         </column>
-        <column name="auth_secret">
+        <column name="last_allowed_version">
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="filter" xsi:type="string">text</item>
-                    <item name="label" xsi:type="string" translate="true">Secret</item>
+                    <item name="label" xsi:type="string" translate="true">Last Allowed Version</item>
+                </item>
+            </argument>
+        </column>
+        <column name="last_allowed_date" class="Magento\Ui\Component\Listing\Columns\Date">
+            <argument name="data" xsi:type="array">
+                <item name="config" xsi:type="array">
+                    <item name="filter" xsi:type="string">date</item>
+                    <item name="component" xsi:type="string">Magento_Ui/js/grid/columns/date</item>
+                    <item name="label" xsi:type="string" translate="true">Updates End Date</item>
                 </item>
             </argument>
         </column>
