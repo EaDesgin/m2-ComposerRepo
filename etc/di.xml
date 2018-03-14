@@ -32,7 +32,9 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="package_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionAuth</item>
+                <item name="package_data_source" xsi:type="string">
+                    Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionCustomerPackages
+                </item>
             </argument>
         </arguments>
     </type>
@@ -52,6 +54,21 @@
             <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth</argument>
+        </arguments>
+    </type>
+    <type name="Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionCustomerPackages">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">eadesign_composerrepo_customer_packages</argument>
+            <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerPackages</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="eadesign_composerrepo" xsi:type="object">Eadesigndev\ComposerRepo\Console\ComposerRepo</item>
+            </argument>
         </arguments>
     </type>
 
