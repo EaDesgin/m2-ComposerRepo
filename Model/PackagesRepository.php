@@ -1,30 +1,29 @@
 <?php
 
-namespace Eadesigndev\ComposerRepo\Model\Customer;
+namespace Eadesigndev\ComposerRepo\Model;
 
 use Eadesigndev\ComposerRepo\Api\Data\ComposerInterface;
-use Eadesigndev\ComposerRepo\Api\CustomerAuthRepositoryInterface;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionAuth;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionAuthFactory;
+use Eadesigndev\ComposerRepo\Api\PackagesRepositoryInterface;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionPackages;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionPackagesFactory;
 use Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterfaceFactory;
-use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth as CustomerAuthResource;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Packages as PackagesResources;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException as Exception;
 use Magento\Framework\Message\ManagerInterface;
 
 /**
- * Class CustomerAuthRepository
- * @package Eadesigndev\ComposerRepo\Model\Customer
+ * Class PackagesRepository
+ * @package Eadesigndev\ComposerRepo\Model
  */
-class CustomerAuthRepository implements CustomerAuthRepositoryInterface
+class PackagesRepository implements PackagesRepositoryInterface
 {
     /**
      * @var array
      */
     private $instances = [];
     /**
-     * @var CustomerAuthResource
+     * @var PackagesResources
      */
     private $resource;
     /**
@@ -32,17 +31,17 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
      */
     private $composer;
     /**
-     * @var CustomerAuthFactory
+     * @var PackagesFactory
      */
-    private $customerAuthFactory;
+    private $packagesFactory;
     /**
      * @var ManagerInterface
      */
     private $messageManager;
     /**
-     * @var CollectionAuthFactory
+     * @var CollectionPackagesFactory
      */
-    private $collectionAuthFactory;
+    private $collectionPackagesFactory;
     /**
      * @var ComposerSearchResultsInterfaceFactory
      */
@@ -50,25 +49,25 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
 
     /**
      * CustomerAuthRepository constructor.
-     * @param CustomerAuthResource $resource
+     * @param PackagesResources $resource
      * @param ComposerInterface $composer
-     * @param CustomerAuthFactory $customerAuthFactory
+     * @param PackagesFactory $packagesFactory
      * @param ManagerInterface $messageManager
-     * @param CollectionAuthFactory $collectionAuthFactory
+     * @param CollectionPackagesFactory $collectionPackagesFactory
      * @param ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory
      */
     public function __construct(
-        CustomerAuthResource $resource,
+        PackagesResources $resource,
         ComposerInterface $composer,
-        CustomerAuthFactory $customerAuthFactory,
+        PackagesFactory $packagesFactory,
         ManagerInterface $messageManager,
-        CollectionAuthFactory $collectionAuthFactory,
+        CollectionPackagesFactory $collectionPackagesFactory,
         ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory
     ) {
         $this->resource                              = $resource;
         $this->composer                              = $composer;
-        $this->collectionAuthFactory                 = $collectionAuthFactory;
-        $this->customerAuthFactory                   = $customerAuthFactory;
+        $this->collectionPackagesFactory             = $collectionPackagesFactory;
+        $this->packagesFactory                       = $packagesFactory;
         $this->messageManager                        = $messageManager;
         $this->composerSearchResultsInterfaceFactory = $composerSearchResultsInterfaceFactory;
     }
@@ -99,7 +98,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
     public function getById($composerId)
     {
         if (!isset($this->instances[$composerId])) {
-            $composer = $this->customerAuthFactory->create();
+            $composer = $this->packagesFactory->create();
             $this->resource->load($composer, $composerId);
             $this->instances[$composerId] = $composer;
         }
@@ -135,7 +134,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
     }
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->collectionAuthFactory->create();
+        $collection = $this->collectionPackagesFactory->create();
 
         $this->addFiltersToCollection($searchCriteria, $collection);
         $this->addSortOrdersToCollection($searchCriteria, $collection);
@@ -145,7 +144,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
 
         return $this->buildSearchResult($searchCriteria, $collection);
     }
-    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
+    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, CollectionPackages $collection)
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             $fields = $conditions = [];
@@ -157,7 +156,7 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
         }
     }
 
-    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
+    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, CollectionPackages $collection)
     {
         foreach ((array) $searchCriteria->getSortOrders() as $sortOrder) {
             $direction = $sortOrder->getDirection() == SortOrder::SORT_ASC ? 'asc' : 'desc';
@@ -165,13 +164,13 @@ class CustomerAuthRepository implements CustomerAuthRepositoryInterface
         }
     }
 
-    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
+    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, CollectionPackages $collection)
     {
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->setCurPage($searchCriteria->getCurrentPage());
     }
 
-    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, CollectionAuth $collection)
+    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, CollectionPackages $collection)
     {
         $searchResults = $this->composerSearchResultsInterfaceFactory->create();
 

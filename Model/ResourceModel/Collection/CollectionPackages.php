@@ -2,16 +2,16 @@
 
 namespace Eadesigndev\ComposerRepo\Model\ResourceModel\Collection;
 
-use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuth as CustomerAuthModel;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth as CustomerAuthResource;
+use Eadesigndev\ComposerRepo\Model\Packages;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Packages as PackagesResource;
 
-class CollectionAuth extends AbstractCollection
+class CollectionPackages extends AbstractCollection
 {
     /**
      * @var string
      */
     //@codingStandardsIgnoreLine
-    protected $_idCustomerAuth = 'entity_id';
+    protected $_idPackages = 'entity_id';
 
     /**
      * Init resource model
@@ -21,8 +21,8 @@ class CollectionAuth extends AbstractCollection
     {
 
         $this->_init(
-            CustomerAuthModel::class,
-            CustomerAuthResource::class
+            Packages::class,
+            PackagesResource::class
         );
 
         $this->_map['composer']['entity_id'] = 'main_table.entity_id';

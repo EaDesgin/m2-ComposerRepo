@@ -4,8 +4,8 @@ namespace Eadesigndev\ComposerRepo\Model\Customer;
 
 use Eadesigndev\ComposerRepo\Api\Data\ComposerInterface;
 use Eadesigndev\ComposerRepo\Api\CustomerPackagesRepositoryInterface;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Collection;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionFactory;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionCustomerPackages;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionPackagesFactory;
 use Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterfaceFactory;
 use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
 use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerPackages as CustomerPackagesResourceModel;
@@ -40,9 +40,9 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
      */
     private $messageManager;
     /**
-     * @var CollectionFactory
+     * @var CollectionPackagesFactory
      */
-    private $collectionFactory;
+    private $collectionPackagesFactory;
     /**
      * @var ComposerSearchResultsInterfaceFactory
      */
@@ -52,7 +52,7 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
      * CustomerPackagesRepository constructor.
      * @param CustomerPackagesResourceModel $resource
      * @param ComposerInterface $composer
-     * @param CollectionFactory $collectionFactory
+     * @param CollectionPackagesFactory $collectionPackagesFactory
      * @param ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory
      * @param CustomerPackagesFactory $customerPackagesFactory
      * @param ManagerInterface $messageManager
@@ -60,14 +60,14 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
     public function __construct(
         CustomerPackagesResourceModel $resource,
         ComposerInterface $composer,
-        CollectionFactory $collectionFactory,
+        CollectionPackagesFactory $collectionPackagesFactory,
         ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory,
         CustomerPackagesFactory $customerPackagesFactory,
         ManagerInterface $messageManager
     ) {
         $this->resource                              = $resource;
         $this->composer                              = $composer;
-        $this->collectionFactory                     = $collectionFactory;
+        $this->collectionPackagesFactory             = $collectionPackagesFactory;
         $this->customerPackagesFactory               = $customerPackagesFactory;
         $this->messageManager                        = $messageManager;
         $this->composerSearchResultsInterfaceFactory = $composerSearchResultsInterfaceFactory;
@@ -138,7 +138,7 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
     }
     public function getList(SearchCriteriaInterface $searchCriteria)
     {
-        $collection = $this->collectionFactory->create();
+        $collection = $this->collectionPackagesFactory->create();
 
         $this->addFiltersToCollection($searchCriteria, $collection);
         $this->addSortOrdersToCollection($searchCriteria, $collection);
@@ -148,7 +148,7 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
 
         return $this->buildSearchResult($searchCriteria, $collection);
     }
-    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
     {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             $fields = $conditions = [];
@@ -160,7 +160,7 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
         }
     }
 
-    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
     {
         foreach ((array) $searchCriteria->getSortOrders() as $sortOrder) {
             $direction = $sortOrder->getDirection() == SortOrder::SORT_ASC ? 'asc' : 'desc';
@@ -168,13 +168,13 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
         }
     }
 
-    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
     {
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->setCurPage($searchCriteria->getCurrentPage());
     }
 
-    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, Collection $collection)
+    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
     {
         $searchResults = $this->composerSearchResultsInterfaceFactory->create();
 
