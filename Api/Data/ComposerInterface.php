@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright © 2017 EaDesign by Eco Active S.R.L. All rights reserved.
+ * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
  * See LICENSE for license details.
  */
 
@@ -8,28 +8,28 @@ namespace Eadesigndev\ComposerRepo\Api\Data;
 
 interface ComposerInterface
 {
-    const ENTITY_ID = 'entity_id';
-    const CREATED_AT = 'created_at';
-    const STATUS = 'status';
-    const PRODUCT_ID = 'product_id';
-    const NAME = 'name';
-    const DESCRIPTION = 'description';
-    const REPOSITORY_URL = 'repository_url';
-    const REPOSITORY_OPTIONS = 'repository_options';
-    const PACKAGE_JSON = 'package_json';
-    const VERSION = 'version';
-    const BUNDLED_PACKAGE = 'bundled_package';
-    const DEFAULT = 'default';
-    const CUSTOMER_ID = 'customer_id';
-    const AUTH_KEY = 'auth_key';
-    const AUTH_SECRET = 'auth_secret';
-    const ORDER_ID = 'order_id';
-    const PACKAGE_ID = 'package_id';
+    const ENTITY_ID            = 'entity_id';
+    const CREATED_AT           = 'created_at';
+    const STATUS               = 'status';
+    const PRODUCT_ID           = 'product_id';
+    const NAME                 = 'name';
+    const DESCRIPTION          = 'description';
+    const REPOSITORY_URL       = 'repository_url';
+    const REPOSITORY_OPTIONS   = 'repository_options';
+    const PACKAGE_JSON         = 'package_json';
+    const VERSION              = 'version';
+    const BUNDLED_PACKAGE      = 'bundled_package';
+    const DEFAULT              = 'default';
+    const CUSTOMER_ID          = 'customer_id';
+    const AUTH_KEY             = 'auth_key';
+    const AUTH_SECRET          = 'auth_secret';
+    const ORDER_ID             = 'order_id';
+    const PACKAGE_ID           = 'package_id';
     const LAST_ALLOWED_VERSION = 'last_allowed_version';
-    const LAST_ALLOWED_DATE = 'last_allowed_date';
-    const VERSION_ID = 'version_id';
-    const REMOTE_IP = 'remote_ip';
-    const FILE = 'file';
+    const LAST_ALLOWED_DATE    = 'last_allowed_date';
+    const VERSION_ID           = 'version_id';
+    const REMOTE_IP            = 'remote_ip';
+    const FILE                 = 'file';
 
 
 
