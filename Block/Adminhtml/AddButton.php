@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace Eadesigndev\ComposerRepo\Block\Adminhtml;
 
@@ -11,17 +15,14 @@ class AddButton extends Container
      */
     public function _construct()
     {
-
         $this->_controller = 'adminhtml_composerrepo';
         $this->_blockGroup = 'Eadesigndev_ComposerRepo';
 
-        $this->_headerText = __('PDF Templates');
-        $this->_addButtonLabel = __('Add New Template');
         parent::_construct();
         $this->buttonList->add(
-            'template_apply',
+            'add',
             [
-                'label' => __('Template'),
+                'label' => __('Packages'),
                 'onclick' => "location.href='" . $this->getUrl('composer_packages/*/edit') . "'",
                 'class' => 'apply'
             ]

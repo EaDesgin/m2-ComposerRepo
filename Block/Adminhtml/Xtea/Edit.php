@@ -1,10 +1,14 @@
 <?php
+/**
+ * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace Eadesigndev\ComposerRepo\Block\Adminhtml\Xtea;
 
 use Magento\Backend\Block\Widget\Context;
-use Magento\Backend\Block\Widget\Form\Container;
 use Magento\Framework\Registry;
+use Magento\Backend\Block\Widget\Form\Container;
 
 /**
  * Class Edit
@@ -18,7 +22,6 @@ class Edit extends Container
      * @var Registry
      *
      */
-
     private $coreRegistry = null;
 
     public function __construct(
@@ -42,7 +45,7 @@ class Edit extends Container
 
         parent::_construct();
 
-        $this->buttonList->update('save', 'label', __('Save'));
+        $this->buttonList->update('save', 'label', __('Save Package'));
         $this->buttonList->add(
             'saveandcontinue',
             [

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace Eadesigndev\ComposerRepo\Block\Adminhtml\Xtea\Edit\Buttons;
 
@@ -14,14 +18,12 @@ abstract class GenericButton
      * @var \Magento\Framework\AuthorizationInterface
      */
     private $authorization;
-
     /**
      * Core registry
      *
      * @var \Magento\Framework\Registry
      */
     private $coreRegistry = null;
-
     /**
      * @var Context
      */
@@ -42,13 +44,11 @@ abstract class GenericButton
     }
 
     /**
-     * Return Template ID
-     *
+     * Return Package ID
      * @return int|null
      */
     public function getEntityId()
     {
-
         return $this->coreRegistry->registry('composer_data')->getEntityId();
     }
 
