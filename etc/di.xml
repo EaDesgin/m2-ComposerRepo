@@ -13,6 +13,9 @@
     <preference for="Eadesigndev\ComposerRepo\Api\CustomerAuthRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository" />
 
+    <preference for="Eadesigndev\ComposerRepo\Api\PackagesRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\PackagesRepository" />
+
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
