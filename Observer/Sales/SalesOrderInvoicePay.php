@@ -3,9 +3,13 @@
 namespace Eadesigndev\ComposerRepo\Observer\Sales;
 
 use Eadesigndev\ComposerRepo\Model\Packages;
-use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackages;
 use Eadesigndev\ComposerRepo\Model\ComposerRepoRepository;
+use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackages;
+use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuth;
+use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
+use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
+use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
 use Eadesigndev\ComposerRepo\Helper\Data;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -15,7 +19,6 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Class SalesOrderInvoicePay
  * @package Eadesigndev\ComposerRepo\Observer\Sales
@@ -23,17 +26,34 @@ use Psr\Log\LoggerInterface;
 class SalesOrderInvoicePay implements ObserverInterface
 {
     /**
+     * @var Packages
+     */
+    private $packages;
+    /**
+     * @var CustomerPackagesRepository
+     */
+    private $customerPackagesRepository;
+    /**
+     * @var CustomerPackagesFactory
+     */
+    private $customerPackagesFactory;
+    /**
      * @var CustomerAuth
      */
-    private $auth;
+    private $customerAuth;
+    /**
+     * @var CustomerAuthFactory
+     */
+    private $customerAuthFactory;
+    /**
+     * @var CustomerAuthRepository
+     */
+    private $customerAuthRepository;
     /**
      * @var CustomerPackages
      */
     private $customerPackages;
-    /**
-     * @var Packages
-     */
-    private $packages;
+
     /**
      * @var LoggerInterface
      */
@@ -54,29 +74,41 @@ class SalesOrderInvoicePay implements ObserverInterface
     /**
      * SalesOrderInvoicePay constructor.
      * @param Packages $packages
+     * @param CustomerAuth $customerAuth
+     * @param CustomerAuthFactory $customerAuthFactory
+     * @param CustomerAuthRepository $customerAuthRepository
      * @param Data $dataHelper
-     * @param CustomerAuth $auth
      * @param LoggerInterface $logger
      * @param SearchCriteriaBuilder $searchCriteria
      * @param CustomerPackages $customerPackages
+     * @param CustomerPackagesRepository $customerPackagesRepository
+     * @param CustomerPackagesFactory $customerPackagesFactory
      * @param ComposerRepoRepository $composerRepoRepository
      */
 
     public function __construct(
         Packages $packages,
         Data $dataHelper,
-        CustomerAuth $auth,
+        CustomerAuth $customerAuth,
+        CustomerAuthFactory $customerAuthFactory,
+        CustomerAuthRepository $customerAuthRepository,
         LoggerInterface $logger,
         SearchCriteriaBuilder $searchCriteria,
         CustomerPackages $customerPackages,
+        CustomerPackagesRepository $customerPackagesRepository,
+        CustomerPackagesFactory $customerPackagesFactory,
         ComposerRepoRepository $composerRepoRepository
     ) {
-        $this->logger                 = $logger;
-        $this->dataHelper             = $dataHelper;
-        $this->packages               = $packages;
-        $this->auth                   = $auth;
-        $this->customerPackages       = $customerPackages;
-        $this->searchCriteria         = $searchCriteria;
+        $this->logger = $logger;
+        $this->dataHelper = $dataHelper;
+        $this->packages = $packages;
+        $this->customerAuth = $customerAuth;
+        $this->customerAuthRepository = $customerAuthRepository;
+        $this->customerAuthFactory = $customerAuthFactory;
+        $this->customerPackages = $customerPackages;
+        $this->searchCriteria = $searchCriteria;
+        $this->customerPackagesRepository = $customerPackagesRepository;
+        $this->customerPackagesFactory = $customerPackagesFactory;
         $this->composerRepoRepository = $composerRepoRepository;
     }
 
@@ -87,7 +119,8 @@ class SalesOrderInvoicePay implements ObserverInterface
      */
     public function execute(
         Observer $observer
-    ) {
+    )
+    {
         $event = $observer->getEvent();
         /** @var Invoice $invoice */
         $invoice = $event->getInvoice();
@@ -95,46 +128,53 @@ class SalesOrderInvoicePay implements ObserverInterface
         $order = $invoice->getOrder();
         $customerId = $order->getCustomerId();
 
-        $packageModel = $this->packages;
-        $installPackages = [];
-
         $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter('product_id',28, 'eq')->create();
-        $items = $this->composerRepoRepository->getList($searchCriteria);
-        $items = $items->getItems();
-
-
+        $itemsCollection = $invoice->getItemsCollection();
         /** @var Item $item */
-        foreach ($invoice->getItemsCollection() as $item) {
-            $package = $packageModel->load($item->getProductId(), 'product_id');
+        foreach ($itemsCollection as $item) {
+            $searchCriteria = $searchCriteriaBuilder->addFilter(
+                'product_id',
+                $item->getProductId(),
+                'eq')->create();
+            $package = $this->composerRepoRepository->getList($searchCriteria);
+            $items = $package->getItems();
+            $lastElementPackage = end($items);
 
+            $getId = $lastElementPackage->getId();
+            if ($getId) {
+                $customerPackage = $this->customerPackagesFactory->create();
+                $customerPackage->setStatus(1);
+                $customerPackage->setCustomerId($customerId);
+                $customerPackage->setOrderId($order->getId());
+                $customerPackage->setPackageId($lastElementPackage->getId());
+                $customerPackage->setLastAllowedVersion($lastElementPackage->getVersion());
 
-            if ($package->getId()) {
-                $installPackages[] = $package;
+                $period = $this->dataHelper->period();
+                if ($period) {
+                    $endDate = new \DateTime();
+                    $endDate->add(new \DateInterval('P' . intval($period) . 'M'));
 
-                $customerPackage = $this->customerPackages
-                    ->setStatus(1)
-                    ->setCustomerId($customerId)
-                    ->setOrderId($order->getId())
-                    ->setPackageId($package->getId())
-                    ->setLastAllowedVersion($package->getVersion());
-
-//                if ($period = $this->dataHelper->hasConfig(\Magento\Store\Model\ScopeInterface::SCOPE_STORE)) ;
-//                {
-//                    $endDate = new DateTime();
-//                    $endDate->add(new DateInterval('P' . intval($period) . 'M'));
-//
-//                    $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
-//                }
-//                try {
-//                    $customerPackage->save();
-//                } catch (\Exception $e) {
-//                    $this->logger->info($e->getMessage());
-//                }
+                    $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
+                }
+                try {
+                    $this->customerPackagesRepository->save($customerPackage);
+                } catch (\Exception $e) {
+                    $this->logger->info($e->getMessage());
+                }
             }
         }
-        if (!count($installPackages)) {
-            return;
-        }
+
+        $authKey = $this->dataHelper->generateUniqueAuthKey();
+        $secretAuthKey = $this->dataHelper->generateSecretAuthKey();
+
+        $customerKey = $this->customerAuthFactory->create();
+        $customerKey->setStatus(1);
+        $customerKey->setDefault(1);
+        $customerKey->setCustomerId($customerId);
+        $customerKey->setDescription('Auto generated key');
+        $customerKey->setAuthKey($authKey);
+        $customerKey->setAuthSecret($secretAuthKey);
+
+        $this->customerAuthRepository->save($customerKey);
     }
 }

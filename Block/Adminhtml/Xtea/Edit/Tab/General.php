@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace Eadesigndev\ComposerRepo\Block\Adminhtml\Xtea\Edit\Tab;
 
@@ -15,7 +19,6 @@ use Magento\Framework\Registry;
 use Magento\Backend\Block\Widget\Form\Generic;
 use Magento\Config\Model\Config\Source\Yesno;
 use Magento\Store\Model\System\Store as SystemStore;
-use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 
 /**
  * Class Main
@@ -24,30 +27,25 @@ use Magento\Backend\Block\Store\Switcher\Form\Renderer\Fieldset\Element;
 class General extends Generic implements TabInterface
 {
     /**
-     * @var PackageType
+     * @var ActiveType
      */
     private $activeType;
-
     /**
      * @var PackageType
      */
     private $packageType;
-
     /**
      * @var Yesno
      */
     private $yesNo;
-
     /**
      * @var SystemStore
      */
     private $systemStore;
-
     /**
      * @var Registry
      */
     private $registry;
-
     /**
      * @var InputType
      */
@@ -80,13 +78,11 @@ class General extends Generic implements TabInterface
      */
     public function _prepareForm()
     {
-
         /** @var ComposerRepo $model */
         $model = $this->registry->registry('composer_data');
 
         /** @var Form $form */
         $form = $this->_formFactory->create();
-
 
         $fieldSet = $form->addFieldset(
             'base_fieldset',
@@ -94,7 +90,6 @@ class General extends Generic implements TabInterface
         );
 
         $types = $this->inputType->getAvailable();
-
         $fieldSet->addField(
             'name',
             'text',
@@ -107,8 +102,8 @@ class General extends Generic implements TabInterface
                 'required' => true,
             ]
         );
-        $types = $this->activeType->getAvailable();
 
+        $types = $this->activeType->getAvailable();
         $fieldSet->addField(
             'status',
             'select',
@@ -122,7 +117,6 @@ class General extends Generic implements TabInterface
         );
 
         $types = $this->packageType->getAvailable();
-
         $fieldSet->addField(
             'bundled_package',
             'select',
@@ -131,7 +125,8 @@ class General extends Generic implements TabInterface
                 'label' => __('Package Type'),
                 'title' => __('Package Type'),
                 'values' => $types,
-                'note' => __('Bundled packages will always be available in the packages.json, this can be useful for required library packages'),
+                'note' => __('Bundled packages will always be available in the packages.json, 
+                             this can be useful for required library packages'),
                 'required' => true,
             ]
         );
@@ -187,7 +182,13 @@ class General extends Generic implements TabInterface
         );
 
         if ($model->getId()) {
-            $fieldSet->addField('entity_id', 'hidden', ['name' => 'entity_id']);
+            $fieldSet->addField(
+                'entity_id',
+                'hidden',
+                [
+                    'name' => 'entity_id'
+                ]
+            );
         }
 
         $form->setValues($model->getData());

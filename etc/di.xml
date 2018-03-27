@@ -4,16 +4,41 @@
     <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepo" />
 
-    <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
-
     <preference for="Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepoRepository" />
+
+    <preference for="Eadesigndev\ComposerRepo\Api\CustomerAuthRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository" />
+
+    <preference for="Eadesigndev\ComposerRepo\Api\CustomerPackagesRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository" />
+
+    <preference for="Eadesigndev\ComposerRepo\Api\PackagesRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\PackagesRepository" />
+
+    <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
                 <item name="fields_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\Collection</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="auth_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionAuth</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
+        <arguments>
+            <argument name="collections" xsi:type="array">
+                <item name="package_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionCustomerPackages</item>
             </argument>
         </arguments>
     </type>
@@ -24,6 +49,30 @@
             <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
             <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
             <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\ComposerRepo</argument>
+        </arguments>
+    </type>
+
+    <type name="Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionAuth">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">eadesign_composerrepo_customer_auth</argument>
+            <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerAuth</argument>
+        </arguments>
+    </type>
+    <type name="Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionCustomerPackages">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">eadesign_composerrepo_customer_packages</argument>
+            <argument name="eventPrefix" xsi:type="string">fields_grid_collection</argument>
+            <argument name="eventObject" xsi:type="string">fields_grid_collection</argument>
+            <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerPackages</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="eadesign_composerrepo" xsi:type="object">Eadesigndev\ComposerRepo\Console\ComposerRepo</item>
+            </argument>
         </arguments>
     </type>
 

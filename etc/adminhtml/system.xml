@@ -5,7 +5,7 @@
         <tab id="eadesign_extensions" translate="label" sortOrder="1">
             <label>EaDesign Settings</label>
         </tab>
-        <section id="ea_composerrepo" translate="label" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
+        <section id="eadesign_composerrepo" translate="label" sortOrder="150" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Composer Repo</label>
             <tab>eadesign_extensions</tab>
             <resource>Eadesigndev_ComposerRepo::configuration</resource>
@@ -30,7 +30,7 @@
                     <comment>Include dev-master as downloadable packge</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="update" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="update_period" translate="label comment" type="text" sortOrder="4" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Update period (months)</label>
                     <comment>Period (in months) for free updates to newer version, leave empty for unlimited</comment>
                 </field>

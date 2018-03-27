@@ -14,7 +14,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 class CustomerAuth extends AbstractDb
 {
     /**
-     * CustomerPackages constructor.
+     * CustomerAuth constructor.
      * @param Context $context
      * @param string|null $connectionName
      */
@@ -31,27 +31,5 @@ class CustomerAuth extends AbstractDb
     public function _construct()
     {
         $this->_init(InstallSchema::TABLE_AUTH, ComposerInterface::ENTITY_ID);
-    }
-
-    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if (!$object->getId()) {
-            $object->setCreatedate(now())
-                ->setStatus(1);
-            $this->generateUniqueAuthKey($object);
-        }
-
-        return parent::_beforeSave($object);
-    }
-
-    protected function generateUniqueAuthKey(\Magento\Framework\Model\AbstractModel $object)
-    {
-        while (($newKey = $this->getUniqueAuthKey()) === false) {
-            // Key not unique, try another one
-        }
-
-        $object->setAuthKey($newKey)
-            ->setAuthSecret(Mage::helper('core')->getRandomString(32));
-        return $object;
     }
 }

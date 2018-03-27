@@ -9,7 +9,7 @@ namespace Eadesigndev\ComposerRepo\Api;
 use Eadesigndev\ComposerRepo\Api\Data\ComposerInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 
-interface ComposerRepoRepositoryInterface
+interface CustomerAuthRepositoryInterface
 {
     public function save(ComposerInterface $templates);
 

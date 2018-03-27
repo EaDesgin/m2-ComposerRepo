@@ -1,6 +1,6 @@
 <?php
 
-namespace Eadesigndev\ComposerRepo\Model\ResourceModel\Customer;
+namespace Eadesigndev\ComposerRepo\Model\ResourceModel\Packages;
 
 use Eadesigndev\ComposerRepo\Api\Data\ComposerInterface;
 use Eadesigndev\ComposerRepo\Setup\InstallSchema;
@@ -8,13 +8,13 @@ use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 
 /**
- * Class CustomerPackages
- * @package Eadesigndev\ComposerRepo\Model\ResourceModel\Customer
+ * Class Version
+ * @package Eadesigndev\ComposerRepo\Model\ResourceModel\Packages
  */
-class CustomerPackages extends AbstractDb
+class Version extends AbstractDb
 {
     /**
-     * CustomerPackages constructor.
+     * Version constructor.
      * @param Context $context
      * @param string|null $connectionName
      */
@@ -30,6 +30,15 @@ class CustomerPackages extends AbstractDb
 
     public function _construct()
     {
-        $this->_init(InstallSchema::TABLE_CUSTOMER_PACKAGE, ComposerInterface::ENTITY_ID);
+        $this->_init(InstallSchema::TABLE_PACKAGES_VERSIONS, ComposerInterface::ENTITY_ID);
+    }
+
+    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if (!$object->getId()) {
+//            $object->setCreatedate(now());
+        }
+
+        return parent::_beforeSave($object);
     }
 }
