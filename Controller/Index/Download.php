@@ -11,26 +11,46 @@ use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuth;
 use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
 use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
+use Eadesigndev\ComposerRepo\Helper\Data;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Eadesigndev\ComposerRepo\Model\Packages\VersionRepository;
+use Magento\Framework\Controller\Result\RawFactory;
+use Magento\Framework\App\Filesystem\DirectoryList;
+
+define('DS', DIRECTORY_SEPARATOR);
 
 /**
- * Class Packagist
- * @package Eadesigndev\ComposerRepo\Controller\Packagist
+ * Class Download
+ * @package Eadesigndev\ComposerRepo\Controller\Download
  */
-class Packagist extends Action
+class Download extends Action
 {
     /**
      * @var Session
      */
     private $session;
+
+    /**
+     * @var Data
+     */
+    private $dataHelper;
     /**
      * @var JsonFactory
      */
     private $resultJsonFactory;
+    /**
+     * @var FileFactory
+     */
+    private $fileFactory;
+    /**
+     * @var RawFactory
+     */
+    private $rawFactory;
     /**
      * @var Packages
      */
@@ -39,6 +59,10 @@ class Packagist extends Action
      * @var PackagesRepository
      */
     private $packagesRepository;
+    /**
+     * @var VersionRepository
+     */
+    private $versionRepository;
     /**
      * @var CustomerPackages
      */
@@ -77,6 +101,9 @@ class Packagist extends Action
      * @param Context $context
      * @param Session $session
      * @param Packages $packages
+     * @param Data $dataHelper
+     * @param FileFactory $fileFactory
+     * @param RawFactory $rawFactory
      * @param JsonFactory $resultJsonFactory
      * @param PackagesRepository $packagesRepository
      * @param CustomerPackages $customerPackages
@@ -87,13 +114,17 @@ class Packagist extends Action
      * @param CustomerPackagesFactory $customerPackagesFactory
      * @param CustomerAuthRepository $customerAuthRepository
      * @param SearchCriteriaBuilder $searchCriteria
+     * @param VersionRepository $versionRepository
      */
 
     public function __construct(
         Context $context,
         Session $session,
         Packages $packages,
+        Data $dataHelper,
+        RawFactory $rawFactory,
         JsonFactory $resultJsonFactory,
+        FileFactory $fileFactory,
         PackagesRepository $packagesRepository,
         CustomerPackages $customerPackages,
         CustomerPackagesRepository $customerPackagesRepository,
@@ -102,11 +133,16 @@ class Packagist extends Action
         CustomerAuthFactory $customerAuthFactory,
         CustomerPackagesFactory $customerPackagesFactory,
         CustomerAuthRepository $customerAuthRepository,
-        SearchCriteriaBuilder $searchCriteria
-    ) {
+        SearchCriteriaBuilder $searchCriteria,
+        VersionRepository $versionRepository
+    )
+    {
         parent::__construct($context);
         $this->session = $session;
         $this->packages = $packages;
+        $this->dataHelper = $dataHelper;
+        $this->fileFactory = $fileFactory;
+        $this->rawFactory = $rawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->packagesRepository = $packagesRepository;
         $this->customerPackages = $customerPackages;
@@ -117,6 +153,7 @@ class Packagist extends Action
         $this->customerPackagesFactory = $customerPackagesFactory;
         $this->customerAuthRepository = $customerAuthRepository;
         $this->searchCriteria = $searchCriteria;
+        $this->versionRepository = $versionRepository;
     }
 
     public function execute()
@@ -143,28 +180,17 @@ class Packagist extends Action
 //            return false;
 //        }
 
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'customer_id',
-            $customerId,
-            'eq')
-            ->create();
-        $customerAuth = $this->customerAuthRepository->getList($searchCriteria);
-        $items = $customerAuth->getItems();
-        $lastElementPackage = end($items);
 
+            $searchCriteriaBuilder = $this->searchCriteria;
+            $searchCriteria = $searchCriteriaBuilder->addFilter(
+                'customer_id',
+                $customerId,
+                'eq')
+                ->create();
+            $customerAuth = $this->customerAuthRepository->getList($searchCriteria);
+            $items = $customerAuth->getItems();
+            $lastElementPackage = end($items);
 
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder
-            ->addFilter('customer_id', $customerId)
-            ->create();
-        $customerPackages = $this->customerPackagesRepository->getList($searchCriteria);
-        $customerPackage = $customerPackages->getItems();
-
-        foreach ($customerPackage as $item) {
-            $customerData = $item;
-            $packageId = $customerData->getData('package_id');
-        }
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder->create();
@@ -173,28 +199,35 @@ class Packagist extends Action
 
         foreach ($items as $item) {
             $packageData = $item;
-            $packageJson = $packageData->getData('package_json');
-            $name = $packageData->getData('name');
-            $decodeJson = json_decode($packageJson);
-
+            $packageName = $packageData->getData('name');
         }
-        if ($customerId && $packageId) {
-            $responseData = [];
-            $responseData = [
-                'notify-batch' => 'http://ean.eadesigndevm2.ro/eadesign_composerrepo/download/notify/',
-                'cached' => false,
-                'packages' => [
-                    $name => $decodeJson,
-                ]
-            ];
 
-            $res = json_encode($responseData, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-            $resultJson = $this->resultJsonFactory->create();
-            $response = $resultJson->setJsonData($res);
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder->create();
+        $versionFile = $this->versionRepository->getList($searchCriteria);
+        $items = $versionFile->getItems();
 
-            return $response;
+        foreach ($items as $item) {
+            $fileData = $item;
+            $file = $fileData->getData('file');
+            $packageVersion = $fileData->getData('version');
+            $params = $this->getRequest()->getParams();
+
+            $packageDir = $this->dataHelper->getConfigAbsoluteDir();
+            $correctPath = $packageDir . DS . $packageName . DS . $file;
+
+            $fileName = $file;
+            $content = file_get_contents($correctPath, true);
+            $fileDownload = $this->fileFactory->create(
+                $fileName,
+                $content,
+                DirectoryList::VAR_DIR,
+                'application/octet-stream');
+
+            return $fileDownload;
         }
     }
+
 
     public function unAuthResponse()
     {

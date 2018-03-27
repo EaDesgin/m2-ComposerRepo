@@ -2,13 +2,12 @@
 
 namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 
+use Eadesigndev\ComposerRepo\Model\Command\Exec;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-
 class Index extends \Magento\Backend\App\Action
 {
-
     /**
      * Authorization level of a basic admin session
      *
@@ -20,17 +19,23 @@ class Index extends \Magento\Backend\App\Action
      * @var PageFactory
      */
     protected $resultPageFactory;
-
+    /**
+     * @var Exec
+     */
+    private $exec;
     /**
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @param Exec $exec
      */
     public function __construct(
         Context $context,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        Exec $exec
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
+        $this->exec = $exec;
     }
 
     /**
@@ -46,6 +51,8 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->addBreadcrumb(__('CMS'), __('CMS'));
         $resultPage->addBreadcrumb(__('Packages'), __('Packages'));
         $resultPage->getConfig()->getTitle()->prepend(__('Composer Packages'));
+
+        $this->exec->run();
 
         $dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
         $dataPersistor->clear('cms_page');
