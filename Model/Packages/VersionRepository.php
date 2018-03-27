@@ -8,7 +8,7 @@ use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionVersion;
 use Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\CollectionVersionFactory;
 use Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterfaceFactory;
 use Eadesigndev\ComposerRepo\Model\VersionFactory;
-use Eadesigndev\ComposerRepo\Model\ResourceModel\Packages\Notify as NotifyResorceModel;
+use Eadesigndev\ComposerRepo\Model\ResourceModel\Packages\Version as VersionResorceModel;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException as Exception;
 use Magento\Framework\Message\ManagerInterface;
@@ -24,7 +24,7 @@ class VersionRepository implements VersionRepositoryInterface
      */
     private $instances = [];
     /**
-     * @var NotifyResorceModel
+     * @var VersionResorceModel
      */
     private $resource;
     /**
@@ -50,7 +50,7 @@ class VersionRepository implements VersionRepositoryInterface
 
     /**
      * CustomerPackagesRepository constructor.
-     * @param NotifyResorceModel $resource
+     * @param VersionResorceModel $resource
      * @param ComposerInterface $composer
      * @param CollectionVersionFactory $collectionVersionFactory
      * @param ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory
@@ -58,7 +58,7 @@ class VersionRepository implements VersionRepositoryInterface
      * @param ManagerInterface $messageManager
      */
     public function __construct(
-        NotifyResorceModel $resource,
+        VersionResorceModel $resource,
         ComposerInterface $composer,
         CollectionVersionFactory $collectionVersionFactory,
         ComposerSearchResultsInterfaceFactory $composerSearchResultsInterfaceFactory,

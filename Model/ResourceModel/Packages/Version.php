@@ -32,4 +32,13 @@ class Version extends AbstractDb
     {
         $this->_init(InstallSchema::TABLE_PACKAGES_VERSIONS, ComposerInterface::ENTITY_ID);
     }
+
+    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
+    {
+        if (!$object->getId()) {
+//            $object->setCreatedate(now());
+        }
+
+        return parent::_beforeSave($object);
+    }
 }
