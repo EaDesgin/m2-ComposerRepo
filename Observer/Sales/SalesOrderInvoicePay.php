@@ -19,7 +19,6 @@ use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\Order\Invoice\Item;
 use Psr\Log\LoggerInterface;
 
-
 /**
  * Class SalesOrderInvoicePay
  * @package Eadesigndev\ComposerRepo\Observer\Sales
@@ -99,8 +98,7 @@ class SalesOrderInvoicePay implements ObserverInterface
         CustomerPackagesRepository $customerPackagesRepository,
         CustomerPackagesFactory $customerPackagesFactory,
         ComposerRepoRepository $composerRepoRepository
-    )
-    {
+    ) {
         $this->logger = $logger;
         $this->dataHelper = $dataHelper;
         $this->packages = $packages;
@@ -159,14 +157,12 @@ class SalesOrderInvoicePay implements ObserverInterface
                     $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
                 }
                 try {
-                    $customerPackage->save();
+                    $this->customerPackagesRepository->save($customerPackage);
                 } catch (\Exception $e) {
                     $this->logger->info($e->getMessage());
                 }
             }
         }
-
-        $this->customerPackagesRepository->save($customerPackage);
 
         $authKey = $this->dataHelper->generateUniqueAuthKey();
         $secretAuthKey = $this->dataHelper->generateSecretAuthKey();

@@ -4,17 +4,20 @@
     <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepo" />
 
-    <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterface"
-                type="Magento\Framework\Api\SearchResults" />
-
     <preference for="Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\ComposerRepoRepository" />
 
     <preference for="Eadesigndev\ComposerRepo\Api\CustomerAuthRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository" />
 
+    <preference for="Eadesigndev\ComposerRepo\Api\CustomerPackagesRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository" />
+
     <preference for="Eadesigndev\ComposerRepo\Api\PackagesRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\PackagesRepository" />
+
+    <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterface"
+                type="Magento\Framework\Api\SearchResults" />
 
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
@@ -35,9 +38,7 @@
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
             <argument name="collections" xsi:type="array">
-                <item name="package_data_source" xsi:type="string">
-                    Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionCustomerPackages
-                </item>
+                <item name="package_data_source" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Collection\Grid\CollectionCustomerPackages</item>
             </argument>
         </arguments>
     </type>
