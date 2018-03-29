@@ -1,0 +1,24 @@
+<html>
+<body>
+<table>
+    <tr>
+        <th class="description">Order ID</th>
+        <th class="auth-key">Description</th>
+        <th class="auth-secretkey">Package Name</th>
+        <th class="auth-secretkey">Last Avaible Version</th>
+    </tr>
+    <?php
+
+    /** @var Eadesigndev\ComposerRepo\Block\Account\Packages $block */
+    foreach ($block->customerPackages() as $item) {
+        echo '<tr>
+                    <td>' . $item->getData('order_id') . '</td>
+                    <td>' . $item->getData('description') . '</td>
+                    <td>' . $item->getData('package_id') . '</td>
+                    <td>' . $item->getData('last_allowed_version') . '</td>
+                  </tr>';
+    }
+    ?>
+</table>
+</body>
+</html>
