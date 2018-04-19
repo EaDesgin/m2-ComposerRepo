@@ -5,7 +5,6 @@ namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-
 class Auth extends \Magento\Backend\App\Action
 {
 

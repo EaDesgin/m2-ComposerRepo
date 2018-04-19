@@ -1,0 +1,21 @@
+<html>
+<body>
+<table>
+    <tr>
+        <th class="description">Description</th>
+        <th class="auth-key">Username</th>
+        <th class="auth-secretkey">Password</th>
+    </tr>
+    <?php
+    /** @var Eadesigndev\ComposerRepo\Block\Account\Auth $block */
+    foreach ($block->customerKey() as $item) {
+        echo '<tr>
+                    <td>' . $item->getData('description') . '</td>
+                    <td>' . $item->getData('auth_key') . '</td>
+                    <td>' . $item->getData('auth_secret') . '</td>
+                  </tr>';
+    }
+    ?>
+</table>
+</body>
+</html>
