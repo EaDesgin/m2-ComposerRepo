@@ -19,8 +19,6 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
-define('DS', DIRECTORY_SEPARATOR);
-
 class Exec extends AbstractModel
 {
     /**

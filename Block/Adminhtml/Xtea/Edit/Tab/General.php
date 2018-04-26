@@ -62,14 +62,14 @@ class General extends Generic implements TabInterface
         ActiveType $activeType,
         array $data = []
     ) {
-        $this->registry = $registry;
-        $this->yesNo = $yesNo;
+        $this->registry    = $registry;
+        $this->yesNo       = $yesNo;
         $this->systemStore = $systemStore;
         $this->packageType = $packageType;
-        $this->inputType = $inputType;
-        $this->activeType = $activeType;
+        $this->inputType   = $inputType;
+        $this->activeType  = $activeType;
 
-        parent::__construct($context, $registry, $formFactory, $data, $inputType, $packageType, $activeType);
+        parent::__construct($context, $registry, $formFactory, $data);
     }
 
     /**
