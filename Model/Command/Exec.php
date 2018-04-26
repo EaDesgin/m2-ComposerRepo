@@ -156,21 +156,30 @@ class Exec extends AbstractModel
             $satisBin = $getConfig->getConfigSatisBin();
             $satisCfg = $getConfig->getConfigSatisCfg();
 
-
             if ($satisBin && $satisCfg) {
                 file_put_contents(
                     $satisCfg,
                     $this->json($config)
                 );
 
-//                $execute = $satisBin . ' -vvv build ' . $satisCfg;
-//                system($execute);
+                $execute = $satisBin . ' -vvv build ' . $satisCfg;
+                system($execute);
 
-                $packages = json_decode(file_get_contents($getConfig->getConfigOutput() . DS . 'packages.json'), true);
+                $packages = json_decode(
+                    file_get_contents(
+                        $getConfig->getConfigOutput() . DS . 'packages.json'
+                    ),
+                    true
+                );
                 $currentDateTime = $this->dateTime->gmtDate();
                 $includes = $packages['includes'];
                 foreach ($includes as $file => $data) {
-                    $includeData = json_decode(file_get_contents($getConfig->getConfigOutput() . DS . $file), true);
+                    $includeData = json_decode(
+                        file_get_contents(
+                            $getConfig->getConfigOutput() . DS . $file
+                        ),
+                        true
+                    );
                     $packages = $this->packages;
                     $includeDataPackages = $includeData['packages'];
 
@@ -235,7 +244,10 @@ class Exec extends AbstractModel
                             $param['m'] = str_replace('/', '_', $packageName);
                             $param['h'] = $versionInfo['dist']['reference'];
                             $param['v'] = $versionNr;
-                            $versionInfo['dist']['url'] = $this->getUrl('eadesign_composerrepo/index/download/file', $param);
+                            $versionInfo['dist']['url'] = $this->getUrl(
+                                'eadesign_composerrepo/index/download/file',
+                                $param
+                            );
 
                             $versions[$version] = $versionInfo;
                             if ($versionNr != '9999999-dev' && version_compare($versionNr, $latestVersion, '>')) {

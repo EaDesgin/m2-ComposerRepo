@@ -68,13 +68,13 @@
             <argument name="resourceModel" xsi:type="string">Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerPackages</argument>
         </arguments>
     </type>
-    <!--<type name="Magento\Framework\Console\CommandList">-->
-        <!--<arguments>-->
-            <!--<argument name="commands" xsi:type="array">-->
-                <!--<item name="eadesign_composerrepo" xsi:type="object">Eadesigndev\ComposerRepo\Console\ComposerRepo</item>-->
-            <!--</argument>-->
-        <!--</arguments>-->
-    <!--</type>-->
+    <type name="Magento\Framework\Console\CommandList">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="eadesign_composerrepo" xsi:type="object">Eadesigndev\ComposerRepo\Console\ComposerRepo</item>
+            </argument>
+        </arguments>
+    </type>
 
     <virtualType name="FieldsGridDataProvider" type="Magento\Framework\View\Element\UiComponent\DataProvider\DataProvider">
         <arguments>
