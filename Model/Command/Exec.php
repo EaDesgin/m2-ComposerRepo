@@ -165,7 +165,7 @@ class Exec extends AbstractModel
 
                 $packages = json_decode(
                     file_get_contents(
-                        $getConfig->getConfigOutput() . DS . 'packages.json'
+                        $getConfig->getConfigOutput() . DIRECTORY_SEPARATOR . 'packages.json'
                     ),
                     true
                 );
@@ -174,7 +174,7 @@ class Exec extends AbstractModel
                 foreach ($includes as $file => $data) {
                     $includeData = json_decode(
                         file_get_contents(
-                            $getConfig->getConfigOutput() . DS . $file
+                            $getConfig->getConfigOutput() . DIRECTORY_SEPARATOR . $file
                         ),
                         true
                     );
@@ -206,7 +206,7 @@ class Exec extends AbstractModel
                             }
 
                             $versionNr = $versionInfo['version_normalized'];
-                            $filePart = explode(DS, $versionInfo['dist']['url']);
+                            $filePart = explode(DIRECTORY_SEPARATOR, $versionInfo['dist']['url']);
 
                             $idPackage = $packageModel->getId();
                             $searchCriteriaBuilder = $this->searchCriteria;
@@ -277,13 +277,13 @@ class Exec extends AbstractModel
                             $customPackages = $custPackages->getItems();
                             $this->printLn(' - Updating max allowed version for customers');
 
-//                            foreach ($customPackages as $customPackage) {
-//                                $this->printLn('   - ' . $customPackage->getCustomerId());
-//                                $customerPackagesFactory = $this->customerPackagesFactory->create();
-//                                $customerPackagesFactory->setLastAllowedVersion($latestVersion);
-//                            }
-//                            continue;
-//                            $customPackages->save();
+                            foreach ($customPackages as $customPackage) {
+                                $this->printLn('   - ' . $customPackage->getCustomerId());
+                                $customerPackagesFactory = $this->customerPackagesFactory->create();
+                                $customerPackagesFactory->setLastAllowedVersion($latestVersion);
+                            }
+                            continue;
+                            $customPackages->save();
                         }
                         if ($updatePackageData) {
                             $packageModel->setPackageJson(json_encode($versions))->save();
@@ -303,12 +303,8 @@ class Exec extends AbstractModel
     {
         $result = [];
         $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'status',
-            [
-                'neq' => 0
-            ]
-        )->create();
+        $searchCriteria = $searchCriteriaBuilder->create();
+        //todo add enable filte here
         $collection = $this->packagesRepository->getList($searchCriteria);
         $items = $collection->getItems();
 

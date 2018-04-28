@@ -45,8 +45,7 @@ class Packages extends Template
         PackagesRepository $packagesRepository,
         CustomerPackagesRepository $customerPackagesRepository,
         array $data = []
-    )
-    {
+    ) {
         $this->session = $session;
         $this->searchCriteria = $searchCriteria;
         $this->packagesRepository = $packagesRepository;
