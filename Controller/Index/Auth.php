@@ -2,36 +2,46 @@
 
 namespace Eadesigndev\ComposerRepo\Controller\Index;
 
-use Magento\Framework\App\Action\Action;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Customer\Model\Session;
 
 /**
  * Class Auth
  * @package Eadesigndev\ComposerRepo\Controller\Auth
  */
-class Auth extends Action
+class Auth extends AbstractAccount
 {
     /**
      * @var PageFactory
      */
-    protected $resultPageFactory;
+    private $resultPageFactory;
 
     /**
-     * Auth constructor.
+     * @var Session
+     */
+    private $session;
+
+    /**
+     * Packages constructor.
      * @param Context $context
      */
 
     /**
+     * Packages constructor.
      * @param Context $context
      * @param PageFactory $resultPageFactory
+     * @param Session $session
      */
     public function __construct(
         Context $context,
-        PageFactory $resultPageFactory
+        PageFactory $resultPageFactory,
+        Session $session
     ) {
         parent::__construct($context);
         $this->resultPageFactory = $resultPageFactory;
+        $this->session           = $session;
     }
 
     /**
@@ -41,12 +51,13 @@ class Auth extends Action
      */
     public function execute()
     {
-        $this->_view->loadLayout();
-        if ($block = $this->_view->getLayout()->getBlock('composerrepo_auth')) {
-            $block->setRefererUrl($this->_redirect->getRefererUrl());
+        if ($this->session->authenticate()) {
+            $this->_view->loadLayout();
+            if ($block = $this->_view->getLayout()->getBlock('composerrepo_auth')) {
+                $block->setRefererUrl($this->_redirect->getRefererUrl());
+            }
+            $this->_view->getPage()->getConfig()->getTitle()->set(__('Composer authentication keys'));
+            $this->_view->renderLayout();
         }
-        $this->_view->getPage()->getConfig()->getTitle()->set(__('Composer authentication keys'));
-        $this->_view->renderLayout();
     }
 }
-

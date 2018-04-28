@@ -13,7 +13,7 @@ use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 
@@ -21,7 +21,7 @@ use Magento\Framework\Controller\Result\JsonFactory;
  * Class Packagist
  * @package Eadesigndev\ComposerRepo\Controller\Packagist
  */
-class Packagist extends Action
+class Packagist extends AbstractAccount
 {
     /**
      * @var Session
@@ -72,6 +72,8 @@ class Packagist extends Action
      */
     private $searchCriteria;
 
+    private $jsonResultFactory;
+
     /**
      * Packagist constructor.
      * @param Context $context
@@ -102,7 +104,8 @@ class Packagist extends Action
         CustomerAuthFactory $customerAuthFactory,
         CustomerPackagesFactory $customerPackagesFactory,
         CustomerAuthRepository $customerAuthRepository,
-        SearchCriteriaBuilder $searchCriteria
+        SearchCriteriaBuilder $searchCriteria,
+        \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory
     ) {
         parent::__construct($context);
         $this->session = $session;
@@ -117,42 +120,42 @@ class Packagist extends Action
         $this->customerPackagesFactory = $customerPackagesFactory;
         $this->customerAuthRepository = $customerAuthRepository;
         $this->searchCriteria = $searchCriteria;
+        $this->jsonResultFactory = $jsonResultFactory;
     }
 
     public function execute()
     {
-        if (!$this->getRequest()->getServer('PHP_AUTH_USER')) {
+        $authKey = $this->getRequest()->getServer('PHP_AUTH_USER');
+
+        if (!$authKey) {
             $this->unAuthResponse();
             return false;
         }
 
-        $this->getRequest()->getServer('PHP_AUTH_USER');
-        $this->getRequest()->getServer('PHP_AUTH_PW');
+        $authCriteriaBuilder = $this->searchCriteria;
+        $authCriteria = $authCriteriaBuilder->addFilter(
+            'auth_key',
+            $authKey,
+            'eq'
+        )->create();
 
-        $session = $this->session;
-        $isLoggedIn = $session->isLoggedIn();
-        $customerId = $session->getCustomerId();
+        $authList = $this->customerAuthRepository->getList($authCriteria);
+        $items = $authList->getItems();
+        if (empty($items)) {
+            $this->unAuthResponse();
+            return false;
+        }
 
-//        if (!$isLoggedIn) {
-//            $this->unAuthResponse();
-//            return false;
-//        }
-//
-//        if (!$customerId) {
-//            $this->unAuthResponse();
-//            return false;
-//        }
+        $item = end($items);
 
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'customer_id',
-            $customerId,
-            'eq')
-            ->create();
-        $customerAuth = $this->customerAuthRepository->getList($searchCriteria);
-        $items = $customerAuth->getItems();
-        $lastElementPackage = end($items);
+        $authSecret = $this->getRequest()->getServer('PHP_AUTH_PW');
 
+        if ($item->getData('auth_secret') !== $authSecret) {
+            $this->unAuthResponse();
+            return false;
+        }
+
+        $customerId = $item->getData('customer_id');
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder
@@ -176,10 +179,8 @@ class Packagist extends Action
             $packageJson = $packageData->getData('package_json');
             $name = $packageData->getData('name');
             $decodeJson = json_decode($packageJson);
-
         }
         if ($customerId && $packageId) {
-            $responseData = [];
             $responseData = [
                 'notify-batch' => 'http://ean.eadesigndevm2.ro/eadesign_composerrepo/download/notify/',
                 'cached' => false,
@@ -201,7 +202,6 @@ class Packagist extends Action
         $this->getResponse()
             ->setHttpResponseCode(401)
             ->setHeader('WWW-Authenticate', 'Basic realm="Eadesign Composer Repository"', true)
-            ->setHeader('HTTP/1.0', '401 Unauthorized')
             ->setBody('Unauthorized Access!');
     }
 }

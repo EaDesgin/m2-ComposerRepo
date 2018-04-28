@@ -14,7 +14,7 @@ use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
 use Eadesigndev\ComposerRepo\Helper\Data;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Customer\Model\Session;
-use Magento\Framework\App\Action\Action;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\App\Response\Http\FileFactory;
@@ -22,13 +22,12 @@ use Eadesigndev\ComposerRepo\Model\Packages\VersionRepository;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-define('DS', DIRECTORY_SEPARATOR);
 
 /**
  * Class Download
  * @package Eadesigndev\ComposerRepo\Controller\Download
  */
-class Download extends Action
+class Download extends AbstractAccount
 {
     /**
      * @var Session
@@ -135,8 +134,7 @@ class Download extends Action
         CustomerAuthRepository $customerAuthRepository,
         SearchCriteriaBuilder $searchCriteria,
         VersionRepository $versionRepository
-    )
-    {
+    ) {
         parent::__construct($context);
         $this->session = $session;
         $this->packages = $packages;
@@ -158,83 +156,73 @@ class Download extends Action
 
     public function execute()
     {
-        if (!$this->getRequest()->getServer('PHP_AUTH_USER')) {
+        $authKey = $this->getRequest()->getServer('PHP_AUTH_USER');
+
+        if (!$authKey) {
             $this->unAuthResponse();
             return false;
         }
 
-        $this->getRequest()->getServer('PHP_AUTH_USER');
-        $this->getRequest()->getServer('PHP_AUTH_PW');
+        $authCriteriaBuilder = $this->searchCriteria;
+        $authCriteria = $authCriteriaBuilder->addFilter(
+            'auth_key',
+            $authKey,
+            'eq'
+        )->create();
 
-        $session = $this->session;
-        $isLoggedIn = $session->isLoggedIn();
-        $customerId = $session->getCustomerId();
-
-//        if (!$isLoggedIn) {
-//            $this->unAuthResponse();
-//            return false;
-//        }
-//
-//        if (!$customerId) {
-//            $this->unAuthResponse();
-//            return false;
-//        }
-
-
-            $searchCriteriaBuilder = $this->searchCriteria;
-            $searchCriteria = $searchCriteriaBuilder->addFilter(
-                'customer_id',
-                $customerId,
-                'eq')
-                ->create();
-            $customerAuth = $this->customerAuthRepository->getList($searchCriteria);
-            $items = $customerAuth->getItems();
-            $lastElementPackage = end($items);
-
-
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->create();
-        $packages = $this->packagesRepository->getList($searchCriteria);
-        $items = $packages->getItems();
-
-        foreach ($items as $item) {
-            $packageData = $item;
-            $packageName = $packageData->getData('name');
+        $authList = $this->customerAuthRepository->getList($authCriteria);
+        $items = $authList->getItems();
+        if (empty($items)) {
+            $this->unAuthResponse();
+            return false;
         }
 
+        $item = end($items);
+
+        $authSecret = $this->getRequest()->getServer('PHP_AUTH_PW');
+
+        if ($item->getData('auth_secret') !== $authSecret) {
+            $this->unAuthResponse();
+            return false;
+        }
+
+        $packageName = str_replace('_', '/', $this->getRequest()->getParam('m'));
+        $version = $this->getRequest()->getParam('v');
+
         $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->create();
+        $searchCriteria = $searchCriteriaBuilder->addFilter(
+            'version',
+            $version,
+            'eq'
+        )->create();
         $versionFile = $this->versionRepository->getList($searchCriteria);
         $items = $versionFile->getItems();
 
-        foreach ($items as $item) {
-            $fileData = $item;
-            $file = $fileData->getData('file');
-            $packageVersion = $fileData->getData('version');
-            $params = $this->getRequest()->getParams();
+        $item = end($items);
 
-            $packageDir = $this->dataHelper->getConfigAbsoluteDir();
-            $correctPath = $packageDir . DS . $packageName . DS . $file;
+        $fileData = $item;
+        $file = $fileData->getData('file');
 
-            $fileName = $file;
-            $content = file_get_contents($correctPath, true);
-            $fileDownload = $this->fileFactory->create(
-                $fileName,
-                $content,
-                DirectoryList::VAR_DIR,
-                'application/octet-stream');
+        $packageDir = $this->dataHelper->getConfigAbsoluteDir();
+        $correctPath = $packageDir . DIRECTORY_SEPARATOR . $packageName . DIRECTORY_SEPARATOR . $file;
 
-            return $fileDownload;
-        }
+        $fileName = $file;
+        $content = file_get_contents($correctPath, true);
+        $fileDownload = $this->fileFactory->create(
+            $fileName,
+            $content,
+            DirectoryList::VAR_DIR,
+            'application/octet-stream'
+        );
+
+        return $fileDownload;
     }
 
-
-    public function unAuthResponse()
+    private function unAuthResponse()
     {
         $this->getResponse()
             ->setHttpResponseCode(401)
             ->setHeader('WWW-Authenticate', 'Basic realm="Eadesign Composer Repository"', true)
-            ->setHeader('HTTP/1.0', '401 Unauthorized')
             ->setBody('Unauthorized Access!');
     }
 }

@@ -52,7 +52,7 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->addBreadcrumb(__('Packages'), __('Packages'));
         $resultPage->getConfig()->getTitle()->prepend(__('Composer Packages'));
 
-        $this->exec->run();
+//        $this->exec->run();
 
         $dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
         $dataPersistor->clear('cms_page');

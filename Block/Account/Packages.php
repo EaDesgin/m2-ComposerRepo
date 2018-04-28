@@ -2,6 +2,7 @@
 
 namespace Eadesigndev\ComposerRepo\Block\Account;
 
+use Eadesigndev\ComposerRepo\Helper\Data;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository;
 use Eadesigndev\ComposerRepo\Model\PackagesRepository;
 use Magento\Framework\View\Element\Template;
@@ -14,6 +15,8 @@ use Magento\Customer\Model\Session;
  */
 class Packages extends Template
 {
+    const PACKAGE = 'package';
+
     /**
      * @var Session
      */
@@ -31,6 +34,8 @@ class Packages extends Template
      */
     private $searchCriteria;
 
+    private $dataHelper;
+
     /**
      * Auth constructor.
      * @param Template\Context $context
@@ -44,12 +49,14 @@ class Packages extends Template
         SearchCriteriaBuilder $searchCriteria,
         PackagesRepository $packagesRepository,
         CustomerPackagesRepository $customerPackagesRepository,
+        Data $dataHelper,
         array $data = []
     ) {
-        $this->session = $session;
-        $this->searchCriteria = $searchCriteria;
-        $this->packagesRepository = $packagesRepository;
+        $this->session                    = $session;
+        $this->searchCriteria             = $searchCriteria;
+        $this->packagesRepository         = $packagesRepository;
         $this->customerPackagesRepository = $customerPackagesRepository;
+        $this->dataHelper                 = $dataHelper;
 
         parent::__construct($context, $data);
     }
@@ -57,30 +64,34 @@ class Packages extends Template
     public function customerPackages()
     {
         $session = $this->session;
-        $isLoggedIn = $session->isLoggedIn();
         $customerId = $session->getCustomerId();
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder->addFilter(
             'customer_id',
-            10
+            $customerId
         )->create();
         $customerKey = $this->customerPackagesRepository->getList($searchCriteria);
         $items = $customerKey->getItems();
 
-        return $items;
+        $completeItems = [];
+        foreach ($items as $item) {
+            $completeItems[] = $this->packages($item);
+        }
+
+        return $completeItems;
     }
 
-    public function packages()
+    public function packages($item)
     {
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'entity_id',
-            6
-        )->create();
-        $packages = $this->packagesRepository->getList($searchCriteria);
-        $items = $packages->getItems();
+        $package = $this->packagesRepository->getById($item->getId());
+        $item->setData(self::PACKAGE, $package);
 
-        return $items;
+        return $item;
+    }
+
+    public function repoUrl()
+    {
+        return $this->dataHelper->getConfigUrl();
     }
 }

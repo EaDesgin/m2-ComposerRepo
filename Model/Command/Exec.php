@@ -134,160 +134,157 @@ class Exec extends AbstractModel
         $this->store_id = 1;
         $getConfig = $this->dataHelper;
 
-        if (true) {
-            $config = [];
-            $config['name'] = $getConfig->getConfigName();
-            $config['homepage'] = $getConfig->getConfigUrl();
-            $config['output-dir'] = $getConfig->getConfigOutput();
-            $config['notify-batch'] = $this->getUrl('eadesign_composerrepo/download/notify');
+        $config = [];
+        $config['name'] = $getConfig->getConfigName();
+        $config['homepage'] = $getConfig->getConfigUrl();
+        $config['output-dir'] = $getConfig->getConfigOutput();
+        $config['notify-batch'] = $this->getUrl('eadesign_composerrepo/download/notify');
 
-            $config['repositories'] = $this->getRepositories();
-            $config['archive'] = [];
-            $config['archive']['directory'] = 'file';
-            $config['archive']['format'] = $getConfig->getConfigArchive();
-            $config['archive']['prefix-url'] = substr($this->getUrl('eadesign_composerrepo/index/download'), 0, -1);
-            $config['archive']['absolute-directory'] = $getConfig->getConfigAbsoluteDir();
-            $config['archive']['checksum'] = false;
-            $config['archive']['skip-dev'] = false;
-            $config['require-all'] = true;
+        $config['repositories'] = $this->getRepositories();
+        $config['archive'] = [];
+        $config['archive']['directory'] = 'file';
+        $config['archive']['format'] = $getConfig->getConfigArchive();
+        $config['archive']['prefix-url'] = substr($this->getUrl('eadesign_composerrepo/index/download'), 0, -1);
+        $config['archive']['absolute-directory'] = $getConfig->getConfigAbsoluteDir();
+        $config['archive']['checksum'] = false;
+        $config['archive']['skip-dev'] = false;
+        $config['require-all'] = true;
 
-            $satisBin = $getConfig->getConfigSatisBin();
-            $satisCfg = $getConfig->getConfigSatisCfg();
+        $satisBin = $getConfig->getConfigSatisBin();
+        $satisCfg = $getConfig->getConfigSatisCfg();
 
-            if ($satisBin && $satisCfg) {
-                file_put_contents(
-                    $satisCfg,
-                    $this->json($config)
-                );
+        if ($satisBin && $satisCfg) {
+            file_put_contents(
+                $satisCfg,
+                $this->json($config)
+            );
 
-                $execute = $satisBin . ' -vvv build ' . $satisCfg;
-                system($execute);
+            $execute = $satisBin . ' -vvv build ' . $satisCfg;
+            system($execute);
 
-                $packages = json_decode(
+            $packages = json_decode(
+                file_get_contents(
+                    $getConfig->getConfigOutput() . DIRECTORY_SEPARATOR . 'packages.json'
+                ),
+                true
+            );
+            $currentDateTime = $this->dateTime->gmtDate();
+            $includes = $packages['includes'];
+            foreach ($includes as $file => $data) {
+                $includeData = json_decode(
                     file_get_contents(
-                        $getConfig->getConfigOutput() . DIRECTORY_SEPARATOR . 'packages.json'
+                        $getConfig->getConfigOutput() . DIRECTORY_SEPARATOR . $file
                     ),
                     true
                 );
-                $currentDateTime = $this->dateTime->gmtDate();
-                $includes = $packages['includes'];
-                foreach ($includes as $file => $data) {
-                    $includeData = json_decode(
-                        file_get_contents(
-                            $getConfig->getConfigOutput() . DIRECTORY_SEPARATOR . $file
-                        ),
-                        true
-                    );
-                    $packages = $this->packages;
-                    $includeDataPackages = $includeData['packages'];
+                $packages = $this->packages;
+                $includeDataPackages = $includeData['packages'];
 
-                    foreach ($includeDataPackages as $packageName => $packageData) {
-                        $packageModel = $packages->getByPackageName($packageName);
+                foreach ($includeDataPackages as $packageName => $packageData) {
+                    $packageModel = $packages->getByPackageName($packageName);
 
-                        if (!$packageModel->getId()) {
-                            continue;
+                    if (!$packageModel->getId()) {
+                        continue;
+                    }
+                    $this->printLn('Building data for package: ' . $packageModel->getName());
+
+                    $versions = [];
+                    $latestVersion = '0.0.0.0';
+                    $updatePackageData = false;
+                    if (!$getConfig->getConfigDevMaster() && isset($packageData['dev-mas'])) {
+                        $this->printLn(' - Removing dev-master from available packages');
+                        unset($packageData['dev-master']);
+                    }
+                    foreach ($packageData as $version => $versionInfo) {
+                        unset($versionInfo['source']);
+                        if (isset($versionInfo['support']['source'])) {
+                            unset($versionInfo['support']['source']);
                         }
-                        $this->printLn('Building data for package: ' . $packageModel->getName());
-
-                        $versions = [];
-                        $latestVersion = '0.0.0.0';
-                        $updatePackageData = false;
-                        if (!$getConfig->getConfigDevMaster() && isset($packageData['dev-mas'])) {
-                            $this->printLn(' - Removing dev-master from available packages');
-                            unset($packageData['dev-master']);
-                        }
-                        foreach ($packageData as $version => $versionInfo) {
-                            unset($versionInfo['source']);
-                            if (isset($versionInfo['support']['source'])) {
-                                unset($versionInfo['support']['source']);
-                            }
-                            if (isset($versionInfo['support']['issues'])) {
-                                unset($versionInfo['support']['issues']);
-                            }
-
-                            $versionNr = $versionInfo['version_normalized'];
-                            $filePart = explode(DIRECTORY_SEPARATOR, $versionInfo['dist']['url']);
-
-                            $idPackage = $packageModel->getId();
-                            $searchCriteriaBuilder = $this->searchCriteria;
-                            $searchCriteria = $searchCriteriaBuilder
-                                ->addFilter('package_id', $idPackage)
-                                ->addFilter('version', $version)
-                                ->create();
-                            $versionModels = $this->versionRepository->getList($searchCriteria);
-                            $items = $versionModels->getItems();
-                            $versionModel = end($items);
-
-                            if (!$versionModel) {
-                                $versionFactory = $this->versionFactory->create();
-                                $versionFactory->setPackageId($idPackage);
-                                $versionFactory->setFile(array_pop($filePart));
-                                $versionFactory->setVersion($versionNr);
-
-                                $versionModel = $this->versionRepository->save($versionFactory);
-                                $updatePackageData = true;
-                                $this->printLn(' - Saving new version: ' . $versionNr);
-                            }
-                            if (strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
-                                $versionFactory = $this->versionFactory->create();
-                                $versionFactory->setFile($filePart);
-                                $versionFactory->setVersion($versionNr);
-
-                                $this->versionRepository->save();
-                                $updatePackageData = true;
-                                $this->printLn(' - Saving updated version reference: ' . $versionNr);
-                            }
-
-                            $param = [];
-                            $param['m'] = str_replace('/', '_', $packageName);
-                            $param['h'] = $versionInfo['dist']['reference'];
-                            $param['v'] = $versionNr;
-                            $versionInfo['dist']['url'] = $this->getUrl(
-                                'eadesign_composerrepo/index/download/file',
-                                $param
-                            );
-
-                            $versions[$version] = $versionInfo;
-                            if ($versionNr != '9999999-dev' && version_compare($versionNr, $latestVersion, '>')) {
-                                $latestVersion = $versionNr;
-                            }
+                        if (isset($versionInfo['support']['issues'])) {
+                            unset($versionInfo['support']['issues']);
                         }
 
-                        if ($packageModel->getVersion() != $latestVersion) {
-                            $packageModel->setVersion($latestVersion);
+                        $versionNr = $versionInfo['version_normalized'];
+                        $filePart = explode(DIRECTORY_SEPARATOR, $versionInfo['dist']['url']);
+
+                        $idPackage = $packageModel->getId();
+                        $searchCriteriaBuilder = $this->searchCriteria;
+                        $searchCriteria = $searchCriteriaBuilder
+                            ->addFilter('package_id', $idPackage)
+                            ->addFilter('version', $version)
+                            ->create();
+                        $versionModels = $this->versionRepository->getList($searchCriteria);
+                        $items = $versionModels->getItems();
+                        $versionModel = end($items);
+
+                        if (!$versionModel) {
+                            $versionFactory = $this->versionFactory->create();
+                            $versionFactory->setPackageId($idPackage);
+                            $versionFactory->setFile(array_pop($filePart));
+                            $versionFactory->setVersion($versionNr);
+
+                            $versionModel = $this->versionRepository->save($versionFactory);
                             $updatePackageData = true;
-
-                            $searchCriteriaBuilder = $this->searchCriteria;
-                            $filters = [
-                                $this->filterBuilder
-                                    ->setField('package_id')
-                                    ->setValue($idPackage)
-                                    ->setConditionType('eq')
-                                    ->create(),
-                                $this->filterBuilder
-                                    ->setField('status')
-                                    ->setValue(1)
-                                    ->setConditionType('eq')
-                                    ->create(),
-                            ];
-                            $searchCriteriaBuilder
-                                ->addFilters($filters);
-                            $searchCriteria = $searchCriteriaBuilder->create();
-                            $custPackages = $this->customerPackagesRepository->getList($searchCriteria);
-                            $customPackages = $custPackages->getItems();
-                            $this->printLn(' - Updating max allowed version for customers');
-
-                            foreach ($customPackages as $customPackage) {
-                                $this->printLn('   - ' . $customPackage->getCustomerId());
-                                $customerPackagesFactory = $this->customerPackagesFactory->create();
-                                $customerPackagesFactory->setLastAllowedVersion($latestVersion);
-                            }
-                            continue;
-                            $customPackages->save();
+                            $this->printLn(' - Saving new version: ' . $versionNr);
                         }
-                        if ($updatePackageData) {
-                            $packageModel->setPackageJson(json_encode($versions))->save();
+                        if (strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
+                            $versionFactory = $this->versionFactory->create();
+                            $versionFactory->setFile($filePart);
+                            $versionFactory->setVersion($versionNr);
+
+                            $this->versionRepository->save();
+                            $updatePackageData = true;
+                            $this->printLn(' - Saving updated version reference: ' . $versionNr);
                         }
+
+                        $param = [];
+                        $param['m'] = str_replace('/', '_', $packageName);
+                        $param['h'] = $versionInfo['dist']['reference'];
+                        $param['v'] = $versionNr;
+                        $versionInfo['dist']['url'] = $this->getUrl(
+                            'eadesign_composerrepo/index/download',
+                            $param
+                        );
+
+                        $versions[$version] = $versionInfo;
+                        if ($versionNr != '9999999-dev' && version_compare($versionNr, $latestVersion, '>')) {
+                            $latestVersion = $versionNr;
+                        }
+                    }
+
+                    if ($packageModel->getVersion() != $latestVersion) {
+                        $packageModel->setVersion($latestVersion);
+
+                        $searchCriteriaBuilder = $this->searchCriteria;
+                        $filters = [
+                            $this->filterBuilder
+                                ->setField('package_id')
+                                ->setValue($idPackage)
+                                ->setConditionType('eq')
+                                ->create(),
+                            $this->filterBuilder
+                                ->setField('status')
+                                ->setValue(1)
+                                ->setConditionType('eq')
+                                ->create(),
+                        ];
+                        $searchCriteriaBuilder
+                            ->addFilters($filters);
+                        $searchCriteria = $searchCriteriaBuilder->create();
+                        $custPackages = $this->customerPackagesRepository->getList($searchCriteria);
+                        $customPackages = $custPackages->getItems();
+                        $this->printLn(' - Updating max allowed version for customers');
+
+                        foreach ($customPackages as $customPackage) {
+                            $this->printLn('   - ' . $customPackage->getCustomerId());
+                            $customerPackagesFactory = $this->customerPackagesFactory->create();
+                            $customerPackagesFactory->setLastAllowedVersion($latestVersion);
+                        }
+                        continue;
+                        $customPackages->save();
+                    }
+                    if ($updatePackageData) {
+                        $packageModel->setPackageJson(json_encode($versions))->save();
                     }
                 }
             }

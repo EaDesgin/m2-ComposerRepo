@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\Framework\Url\SecurityInfo">
+        <arguments>
+            <argument name="secureUrlList" xsi:type="array">
+                <item name="eadesign_composerrepo" xsi:type="string">/eadesign_composerrepo/</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Customer\Controller\Plugin\Account">
+        <arguments>
+            <argument name="allowedActions" xsi:type="array">
+                <item name="auth" xsi:type="string">auth</item>
+                <item name="download" xsi:type="string">download</item>
+                <item name="packages" xsi:type="string">packages</item>
+                <item name="packagist" xsi:type="string">packagist</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
