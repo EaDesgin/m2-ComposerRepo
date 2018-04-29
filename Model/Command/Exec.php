@@ -211,7 +211,7 @@ class Exec extends AbstractModel
                         $searchCriteriaBuilder = $this->searchCriteria;
                         $searchCriteria = $searchCriteriaBuilder
                             ->addFilter('package_id', $idPackage)
-                            ->addFilter('version', $version)
+                            ->addFilter('version', $versionNr)
                             ->create();
                         $versionModels = $this->versionRepository->getList($searchCriteria);
                         $items = $versionModels->getItems();
@@ -254,6 +254,7 @@ class Exec extends AbstractModel
 
                     if ($packageModel->getVersion() != $latestVersion) {
                         $packageModel->setVersion($latestVersion);
+                        $updatePackageData = true;
 
                         $searchCriteriaBuilder = $this->searchCriteria;
                         $filters = [
