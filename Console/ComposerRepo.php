@@ -2,7 +2,7 @@
 
 namespace Eadesigndev\ComposerRepo\Console;
 
-use Magento\Framework\App\Action\Context;
+use Eadesigndev\ComposerRepo\Model\Command\Exec;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,18 +14,25 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ComposerRepo extends Command
 {
 
-    public function __construct($name = null)
-    {
+    public $exec;
+
+    public function __construct(
+        Exec $exec,
+        $name = null
+    ) {
+        $this->exec = $exec;
         parent::__construct($name);
     }
 
-    protected function configure()
+    public function configure()
     {
-        $this->setName('eadesign:composerrepo')->setDescription('Prints hello world.');
+        $this->setName('eadesign:composerrepo')->setDescription('Create packages.');
     }
 
-    protected function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output)
     {
-        $output->writeln('Hello World!');
+        $this->exec->run();
+
+        $output->writeln('The composer repositories are built!');
     }
 }

@@ -50,13 +50,12 @@ class Auth extends Template
     public function customerKey()
     {
         $session = $this->session;
-        $isLoggedIn = $session->isLoggedIn();
         $customerId = $session->getCustomerId();
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder->addFilter(
             'customer_id',
-            10
+            $customerId
         )->create();
         $customerKey = $this->customerAuthRepository->getList($searchCriteria);
         $items = $customerKey->getItems();

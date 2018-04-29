@@ -1,5 +1,8 @@
-<html>
-<body>
+<?php
+/** @var Eadesigndev\ComposerRepo\Block\Account\Packages $block */
+/** @var Eadesigndev\ComposerRepo\Model\Packages $package */
+$packages = $block->customerPackages();
+?>
 <table>
     <tr>
         <th class="description">Order ID</th>
@@ -7,18 +10,27 @@
         <th class="auth-secretkey">Package Name</th>
         <th class="auth-secretkey">Last Avaible Version</th>
     </tr>
-    <?php
-
-    /** @var Eadesigndev\ComposerRepo\Block\Account\Packages $block */
-    foreach ($block->customerPackages() as $item) {
-        echo '<tr>
-                    <td>' . $item->getData('order_id') . '</td>
-                    <td>' . $item->getData('description') . '</td>
-                    <td>' . $item->getData('package_id') . '</td>
-                    <td>' . $item->getData('last_allowed_version') . '</td>
-                  </tr>';
-    }
-    ?>
+    <?php foreach ($packages as $item) :?>
+        <tr>
+            <?php $package = $item->getData(\Eadesigndev\ComposerRepo\Block\Account\Packages::PACKAGE) ?>
+            <td><?php echo $item->getData('order_id') ?> </td>
+            <td><?php echo $package->getData('name') ?></td>
+            <td><?php echo $package->getData('description') ?></td>
+            <td><?php echo $package->getData('version') ?></td>
+        </tr>
+    <?php endforeach; ?>
 </table>
-</body>
-</html>
+
+<div class="dashboard">
+    <div class="box-account box-info">
+        <div class="box-head"><h2>Installation Instructions</h2></div>
+        <div class="box-content">
+            To install the available packages you need to add our repository to your composer configuration with the following command:<br><br>
+            <pre><code>composer config repositories.eadesignro composer <?php echo $block->repoUrl()?></code></pre>
+            <br>
+            Next install the package with the command:<br><br>
+            <pre><code>composer require [package_name]</code></pre><br>
+            When prompted, enter your <a href="https://www.eadesign.ro/composer/customer/">Authentication details</a>.
+        </div>
+    </div>
+</div>
