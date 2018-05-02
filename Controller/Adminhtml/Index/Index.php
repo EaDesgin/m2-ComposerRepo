@@ -53,7 +53,7 @@ class Index extends \Magento\Backend\App\Action
         $resultPage->getConfig()->getTitle()->prepend(__('Composer Packages'));
 
         /** Start test debug */
-        $this->exec->run();
+//        $this->exec->run();
         /** Stop test debug */
         $dataPersistor = $this->_objectManager->get(\Magento\Framework\App\Request\DataPersistorInterface::class);
         $dataPersistor->clear('cms_page');
