@@ -6,14 +6,14 @@
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-packages-ticket-link" after="-">
                 <arguments>
                     <argument name="path" xsi:type="string">eadesign_composerrepo/index/packages</argument>
-                    <argument name="label" xsi:type="string">Packages</argument>
+                    <argument name="label" xsi:type="string">Composer Packages</argument>
                     <argument name="sortOrder" xsi:type="number">1900</argument>
                 </arguments>
             </block>
             <block class="Magento\Framework\View\Element\Html\Link\Current" name="customer-account-navigation-auth-ticket-link" after="-">
                 <arguments>
                     <argument name="path" xsi:type="string">eadesign_composerrepo/index/auth</argument>
-                    <argument name="label" xsi:type="string">Auth Keys</argument>
+                    <argument name="label" xsi:type="string"> Composer Auth Keys</argument>
                     <argument name="sortOrder" xsi:type="number">1800</argument>
                 </arguments>
             </block>

@@ -181,6 +181,7 @@ class Exec extends AbstractModel
                 $includeDataPackages = $includeData['packages'];
 
                 foreach ($includeDataPackages as $packageName => $packageData) {
+                    /** @var Packages $packageModel */
                     $packageModel = $packages->getByPackageName($packageName);
 
                     if (!$packageModel->getId()) {
@@ -281,11 +282,14 @@ class Exec extends AbstractModel
                             $customerPackagesFactory = $this->customerPackagesFactory->create();
                             $customerPackagesFactory->setLastAllowedVersion($latestVersion);
                         }
-                        continue;
-                        $customPackages->save();
+
+                        $customPackage->save();
                     }
+
                     if ($updatePackageData) {
-                        $packageModel->setPackageJson(json_encode($versions))->save();
+                        if ($packageModel->getData('status') == 1) {
+                            $packageModel->setPackageJson(json_encode($versions))->save();
+                        }
                     }
                 }
             }
