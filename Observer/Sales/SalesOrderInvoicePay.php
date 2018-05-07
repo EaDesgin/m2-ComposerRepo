@@ -131,38 +131,38 @@ class SalesOrderInvoicePay implements ObserverInterface
         $searchCriteriaBuilder = $this->searchCriteria;
         $itemsCollection = $invoice->getItemsCollection();
         /** @var Item $item */
-        foreach ($itemsCollection as $item) {
-            $searchCriteria = $searchCriteriaBuilder->addFilter(
-                'product_id',
-                $item->getProductId(),
-                'eq')->create();
-            $package = $this->composerRepoRepository->getList($searchCriteria);
-            $items = $package->getItems();
-            $lastElementPackage = end($items);
-
-            $getId = $lastElementPackage->getId();
-            if ($getId) {
-                $customerPackage = $this->customerPackagesFactory->create();
-                $customerPackage->setStatus(1);
-                $customerPackage->setCustomerId($customerId);
-                $customerPackage->setOrderId($order->getId());
-                $customerPackage->setPackageId($lastElementPackage->getId());
-                $customerPackage->setLastAllowedVersion($lastElementPackage->getVersion());
-
-                $period = $this->dataHelper->period();
-                if ($period) {
-                    $endDate = new \DateTime();
-                    $endDate->add(new \DateInterval('P' . intval($period) . 'M'));
-
-                    $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
-                }
-                try {
-                    $this->customerPackagesRepository->save($customerPackage);
-                } catch (\Exception $e) {
-                    $this->logger->info($e->getMessage());
-                }
-            }
-        }
+//        foreach ($itemsCollection as $item) {
+//            $searchCriteria = $searchCriteriaBuilder->addFilter(
+//                'product_id',
+//                $item->getProductId(),
+//                'eq')->create();
+//            $package = $this->composerRepoRepository->getList($searchCriteria);
+//            $items = $package->getItems();
+//            $lastElementPackage = end($items);
+//
+//            $getId = $lastElementPackage->getId();
+//            if ($getId) {
+//                $customerPackage = $this->customerPackagesFactory->create();
+//                $customerPackage->setStatus(1);
+//                $customerPackage->setCustomerId($customerId);
+//                $customerPackage->setOrderId($order->getId());
+//                $customerPackage->setPackageId($lastElementPackage->getId());
+//                $customerPackage->setLastAllowedVersion($lastElementPackage->getVersion());
+//
+//                $period = $this->dataHelper->period();
+//                if ($period) {
+//                    $endDate = new \DateTime();
+//                    $endDate->add(new \DateInterval('P' . intval($period) . 'M'));
+//
+//                    $customerPackage->setLastAllowedDate($endDate->format('Y-m-d H:i:s'));
+//                }
+//                try {
+//                    $this->customerPackagesRepository->save($customerPackage);
+//                } catch (\Exception $e) {
+//                    $this->logger->info($e->getMessage());
+//                }
+//            }
+//        }
 
         $authKey = $this->dataHelper->generateUniqueAuthKey();
         $secretAuthKey = $this->dataHelper->generateSecretAuthKey();
