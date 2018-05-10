@@ -162,27 +162,28 @@ class Packagist extends AbstractAccount
             ->addFilter('customer_id', $customerId)
             ->create();
         $customerPackages = $this->customerPackagesRepository->getList($searchCriteria);
-        $customerPackage = $customerPackages->getItems();
+        $customerPackage  = $customerPackages->getItems();
 
-        foreach ($customerPackage as $item) {
-            $customerData = $item;
+        foreach ($customerPackage as $customerData) {
             $packageId = $customerData->getData('package_id');
         }
 
         $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->create();
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilter('entity_id', $packageId)
+            ->create();
         $packages = $this->packagesRepository->getList($searchCriteria);
         $items = $packages->getItems();
 
-        foreach ($items as $item) {
-            $packageData = $item;
-            $packageJson = $packageData->getData('package_json');
-            $name = $packageData->getData('name');
+        foreach ($items as $packageId) {
+            $packageJson = $packageId->getData('package_json');
+            $name = $packageId->getData('name');
             $decodeJson = json_decode($packageJson);
         }
+
         if ($customerId && $packageId) {
             $responseData = [
-                'notify-batch' => 'http://ean.eadesigndevm2.ro/eadesign_composerrepo/download/notify/',
+                'notify-batch' => 'https://www.eadesign.ro/eadesign_composerrepo/index/packagist/',
                 'cached' => false,
                 'packages' => [
                     $name => $decodeJson,
@@ -192,9 +193,10 @@ class Packagist extends AbstractAccount
             $res = json_encode($responseData, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             $resultJson = $this->resultJsonFactory->create();
             $response = $resultJson->setJsonData($res);
-
-            return $response;
         }
+
+        return $response;
+
     }
 
     public function unAuthResponse()
