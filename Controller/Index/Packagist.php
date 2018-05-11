@@ -16,6 +16,7 @@ use Magento\Customer\Model\Session;
 use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Api\FilterBuilder;
 
 /**
  * Class Packagist
@@ -71,8 +72,13 @@ class Packagist extends AbstractAccount
      * @var SearchCriteriaBuilder
      */
     private $searchCriteria;
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
 
     private $jsonResultFactory;
+
 
     /**
      * Packagist constructor.
@@ -89,6 +95,7 @@ class Packagist extends AbstractAccount
      * @param CustomerPackagesFactory $customerPackagesFactory
      * @param CustomerAuthRepository $customerAuthRepository
      * @param SearchCriteriaBuilder $searchCriteria
+     * @param FilterBuilder $filterBuilder
      */
 
     public function __construct(
@@ -105,22 +112,24 @@ class Packagist extends AbstractAccount
         CustomerPackagesFactory $customerPackagesFactory,
         CustomerAuthRepository $customerAuthRepository,
         SearchCriteriaBuilder $searchCriteria,
+        FilterBuilder $filterBuilder,
         \Magento\Framework\Controller\Result\JsonFactory $jsonResultFactory
     ) {
         parent::__construct($context);
-        $this->session = $session;
-        $this->packages = $packages;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->packagesRepository = $packagesRepository;
-        $this->customerPackages = $customerPackages;
+        $this->session                    = $session;
+        $this->packages                   = $packages;
+        $this->resultJsonFactory          = $resultJsonFactory;
+        $this->packagesRepository         = $packagesRepository;
+        $this->customerPackages           = $customerPackages;
         $this->customerPackagesRepository = $customerPackagesRepository;
-        $this->composerRepoRepository = $composerRepoRepository;
-        $this->customerAuth = $customerAuth;
-        $this->customerAuthFactory = $customerAuthFactory;
-        $this->customerPackagesFactory = $customerPackagesFactory;
-        $this->customerAuthRepository = $customerAuthRepository;
-        $this->searchCriteria = $searchCriteria;
-        $this->jsonResultFactory = $jsonResultFactory;
+        $this->composerRepoRepository     = $composerRepoRepository;
+        $this->customerAuth               = $customerAuth;
+        $this->customerAuthFactory        = $customerAuthFactory;
+        $this->customerPackagesFactory    = $customerPackagesFactory;
+        $this->customerAuthRepository     = $customerAuthRepository;
+        $this->searchCriteria             = $searchCriteria;
+        $this->jsonResultFactory          = $jsonResultFactory;
+        $this->filterBuilder              = $filterBuilder;
     }
 
     public function execute()
@@ -132,12 +141,10 @@ class Packagist extends AbstractAccount
             return false;
         }
 
-        $authCriteriaBuilder = $this->searchCriteria;
-        $authCriteria = $authCriteriaBuilder->addFilter(
-            'auth_key',
-            $authKey,
-            'eq'
-        )->create();
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $authCriteria = $searchCriteriaBuilder
+            ->addFilter('auth_key', $authKey, 'eq')
+            ->create();
 
         $authList = $this->customerAuthRepository->getList($authCriteria);
         $items = $authList->getItems();
@@ -165,12 +172,19 @@ class Packagist extends AbstractAccount
         $customerPackage  = $customerPackages->getItems();
 
         foreach ($customerPackage as $customerData) {
-            $packageId = $customerData->getData('package_id');
+            $packageId[] = $customerData->getData('package_id');
         }
+
+        $packageFilter[] = $this->filterBuilder
+            ->setField('entity_id')
+            ->setValue($packageId)
+            ->setConditionType('in')
+            ->create();
+
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder
-            ->addFilter('entity_id', $packageId)
+            ->addFilters($packageFilter)
             ->create();
         $packages = $this->packagesRepository->getList($searchCriteria);
         $items = $packages->getItems();
@@ -178,25 +192,21 @@ class Packagist extends AbstractAccount
         foreach ($items as $packageId) {
             $packageJson = $packageId->getData('package_json');
             $name = $packageId->getData('name');
-            $decodeJson = json_decode($packageJson);
+            $decodeJson[$name] = json_decode($packageJson);
         }
 
-        if ($customerId && $packageId) {
-            $responseData = [
-                'notify-batch' => 'https://www.eadesign.ro/eadesign_composerrepo/index/packagist/',
-                'cached' => false,
-                'packages' => [
-                    $name => $decodeJson,
-                ]
-            ];
+        $responseData = [
+            'notify-batch' => 'https://www.eadesign.ro/eadesign_composerrepo/index/packagist/',
+            'cached' => false,
+            'packages' => [$decodeJson]
+        ];
 
+        if ($customerId && $packageId) {
             $res = json_encode($responseData, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
             $resultJson = $this->resultJsonFactory->create();
             $response = $resultJson->setJsonData($res);
         }
-
         return $response;
-
     }
 
     public function unAuthResponse()
