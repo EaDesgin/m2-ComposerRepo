@@ -181,7 +181,6 @@ class Packagist extends AbstractAccount
             ->setConditionType('in')
             ->create();
 
-
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder
             ->addFilters($packageFilter)
@@ -198,7 +197,7 @@ class Packagist extends AbstractAccount
         $responseData = [
             'notify-batch' => 'https://www.eadesign.ro/eadesign_composerrepo/index/packagist/',
             'cached' => false,
-            'packages' => [$decodeJson]
+            'packages' => $decodeJson
         ];
 
         if ($customerId && $packageId) {
