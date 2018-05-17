@@ -218,6 +218,9 @@ class Exec extends AbstractModel
                         $items = $versionModels->getItems();
                         $versionModel = end($items);
 
+                        /**
+                         * Create a new version and save
+                         */
                         if (!$versionModel) {
                             $versionFactory = $this->versionFactory->create();
                             $versionFactory->setPackageId($idPackage);
@@ -228,6 +231,10 @@ class Exec extends AbstractModel
                             $updatePackageData = true;
                             $this->printLn(' - Saving new version: ' . $versionNr);
                         }
+
+                        /**
+                         * Update a existent version and save
+                         */
                         if (strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
                             $versionFactory = $this->versionFactory->create();
                             $versionFactory->setFile($filePart);
