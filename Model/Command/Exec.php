@@ -233,7 +233,7 @@ class Exec extends AbstractModel
                             $versionFactory->setFile($filePart);
                             $versionFactory->setVersion($versionNr);
 
-                            $this->versionRepository->save();
+                            $this->versionRepository->save($versionFactory);
                             $updatePackageData = true;
                             $this->printLn(' - Saving updated version reference: ' . $versionNr);
                         }
