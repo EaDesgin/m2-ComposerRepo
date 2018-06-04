@@ -230,7 +230,7 @@ class Exec extends AbstractModel
                         }
                         if (strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
                             $versionFactory = $this->versionFactory->create();
-                            $versionFactory->setFile($filePart);
+                            $versionFactory->setFile(end($filePart));
                             $versionFactory->setVersion($versionNr);
 
                             $this->versionRepository->save($versionFactory);
