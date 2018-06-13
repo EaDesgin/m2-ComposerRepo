@@ -5,7 +5,7 @@ namespace Eadesigndev\ComposerRepo\Block\Account;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\SessionFactory;
 
 /**
  * Class Auth
@@ -14,9 +14,9 @@ use Magento\Customer\Model\Session;
 class Auth extends Template
 {
     /**
-     * @var Session
+     * @var SessionFactory
      */
-    private $session;
+    private $sessionFactory;
     /**
      * @var CustomerAuthRepository
      */
@@ -29,18 +29,18 @@ class Auth extends Template
     /**
      * Auth constructor.
      * @param Template\Context $context
-     * @param Session $session
+     * @param SessionFactory $sessionFactory
      * @param SearchCriteriaBuilder $searchCriteria
      * @param CustomerAuthRepository $customerAuthRepository
      */
     public function __construct(
         Template\Context $context,
-        Session $session,
+        SessionFactory $sessionFactory,
         SearchCriteriaBuilder $searchCriteria,
         CustomerAuthRepository $customerAuthRepository,
         array $data = []
     ) {
-        $this->session = $session;
+        $this->sessionFactory = $sessionFactory;
         $this->searchCriteria = $searchCriteria;
         $this->customerAuthRepository = $customerAuthRepository;
 
@@ -49,7 +49,8 @@ class Auth extends Template
 
     public function customerKey()
     {
-        $session = $this->session;
+        $sessionFactory = $this->sessionFactory;
+        $session = $sessionFactory->create();
         $customerId = $session->getCustomerId();
 
         $searchCriteriaBuilder = $this->searchCriteria;
