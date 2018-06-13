@@ -7,7 +7,7 @@ use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository;
 use Eadesigndev\ComposerRepo\Model\PackagesRepository;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Customer\Model\Session;
+use Magento\Customer\Model\SessionFactory;
 
 /**
  * Class Packages
@@ -18,9 +18,9 @@ class Packages extends Template
     const PACKAGE = 'package';
 
     /**
-     * @var Session
+     * @var SessionFactory
      */
-    private $session;
+    private $sessionFactory;
     /**
      * @var CustomerPackagesRepository
      */
@@ -39,20 +39,20 @@ class Packages extends Template
     /**
      * Auth constructor.
      * @param Template\Context $context
-     * @param Session $session
+     * @param SessionFactory $sessionFactory
      * @param SearchCriteriaBuilder $searchCriteria
      * @param CustomerPackagesRepository $customerPackagesRepository
      */
     public function __construct(
         Template\Context $context,
-        Session $session,
+        SessionFactory $sessionFactory,
         SearchCriteriaBuilder $searchCriteria,
         PackagesRepository $packagesRepository,
         CustomerPackagesRepository $customerPackagesRepository,
         Data $dataHelper,
         array $data = []
     ) {
-        $this->session                    = $session;
+        $this->sessionFactory             = $sessionFactory;
         $this->searchCriteria             = $searchCriteria;
         $this->packagesRepository         = $packagesRepository;
         $this->customerPackagesRepository = $customerPackagesRepository;
@@ -63,7 +63,8 @@ class Packages extends Template
 
     public function customerPackages()
     {
-        $session = $this->session;
+        $sessionFactory = $this->sessionFactory;
+        $session = $sessionFactory->create();
         $customerId = $session->getCustomerId();
 
         $searchCriteriaBuilder = $this->searchCriteria;
