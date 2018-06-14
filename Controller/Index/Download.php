@@ -1,28 +1,23 @@
 <?php
+/**
+ * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
+ * See LICENSE for license details.
+ */
 
 namespace Eadesigndev\ComposerRepo\Controller\Index;
 
-use Eadesigndev\ComposerRepo\Model\Packages;
+use Eadesigndev\ComposerRepo\Helper\Data as DataHelper;
 use Eadesigndev\ComposerRepo\Model\PackagesRepository;
-use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackages;
-use Eadesigndev\ComposerRepo\Model\Customer\CustomerPackagesRepository;
-use Eadesigndev\ComposerRepo\Model\ComposerRepoRepository;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuth;
-use Eadesigndev\ComposerRepo\Model\CustomerAuthFactory;
-use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
+use Eadesigndev\ComposerRepo\Model\Packages\VersionRepository;
 use Eadesigndev\ComposerRepo\Model\Customer\CustomerAuthRepository;
-use Eadesigndev\ComposerRepo\Helper\Data;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Customer\Model\Session;
-use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Eadesigndev\ComposerRepo\Model\Packages\VersionRepository;
-use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Api\FilterBuilder;
-use Eadesigndev\ComposerRepo\Model\Packages\Version;
 
 /**
  * Class Download
@@ -30,160 +25,92 @@ use Eadesigndev\ComposerRepo\Model\Packages\Version;
  */
 class Download extends AbstractAccount
 {
-    /**
-     * @var Session
-     */
-    private $session;
-
-    /**
-     * @var Data
-     */
     private $dataHelper;
-    /**
-     * @var JsonFactory
-     */
+
     private $resultJsonFactory;
-    /**
-     * @var FileFactory
-     */
+
     private $fileFactory;
-    /**
-     * @var RawFactory
-     */
-    private $rawFactory;
-    /**
-     * @var Packages
-     */
-    private $packages;
-    /**
-     * @var PackagesRepository
-     */
+
     private $packagesRepository;
-    /**
-     * @var VersionRepository
-     */
+
     private $versionRepository;
-    /**
-     * @var CustomerPackages
-     */
-    private $customerPackages;
-    /**
-     * @var CustomerPackagesRepository
-     */
-    private $customerPackagesRepository;
-    /**
-     * @var ComposerRepoRepository
-     */
-    private $composerRepoRepository;
-    /**
-     * @var CustomerAuth
-     */
+
     private $customerAuth;
-    /**
-     * @var CustomerAuthFactory
-     */
-    private $customerAuthFactory;
-    /**
-     * @var CustomerPackagesFactory
-     */
-    private $customerPackagesFactory;
-    /**
-     * @var CustomerAuthRepository
-     */
+
     private $customerAuthRepository;
-    /**
-     * @var SearchCriteriaBuilder
-     */
+
     private $searchCriteria;
-    /**
-     * @var FilterBuilder
-     */
+
     private $filterBuilder;
 
-    private $versionModel;
-
     /**
-     * Packagist constructor.
+     * Download Controller constructor.
      * @param Context $context
-     * @param Session $session
-     * @param Packages $packages
-     * @param Data $dataHelper
+     * @param DataHelper $dataHelper
      * @param FileFactory $fileFactory
-     * @param RawFactory $rawFactory
      * @param JsonFactory $resultJsonFactory
      * @param PackagesRepository $packagesRepository
-     * @param CustomerPackages $customerPackages
-     * @param CustomerPackagesRepository $customerPackagesRepository
-     * @param ComposerRepoRepository $composerRepoRepository
      * @param CustomerAuth $customerAuth
-     * @param CustomerAuthFactory $customerAuthFactory
-     * @param CustomerPackagesFactory $customerPackagesFactory
      * @param CustomerAuthRepository $customerAuthRepository
      * @param SearchCriteriaBuilder $searchCriteria
      * @param VersionRepository $versionRepository
      * @param FilterBuilder $filterBuilder
      */
-
     public function __construct(
         Context $context,
-        Session $session,
-        Packages $packages,
-        Data $dataHelper,
-        RawFactory $rawFactory,
+        DataHelper $dataHelper,
         JsonFactory $resultJsonFactory,
         FileFactory $fileFactory,
         PackagesRepository $packagesRepository,
-        CustomerPackages $customerPackages,
-        CustomerPackagesRepository $customerPackagesRepository,
-        ComposerRepoRepository $composerRepoRepository,
         CustomerAuth $customerAuth,
-        CustomerAuthFactory $customerAuthFactory,
-        CustomerPackagesFactory $customerPackagesFactory,
         CustomerAuthRepository $customerAuthRepository,
         SearchCriteriaBuilder $searchCriteria,
         VersionRepository $versionRepository,
-        FilterBuilder $filterBuilder,
-        Version $versionModel
+        FilterBuilder $filterBuilder
     ) {
-        parent::__construct($context);
-        $this->session = $session;
-        $this->packages = $packages;
-        $this->dataHelper = $dataHelper;
-        $this->fileFactory = $fileFactory;
-        $this->rawFactory = $rawFactory;
-        $this->resultJsonFactory = $resultJsonFactory;
-        $this->packagesRepository = $packagesRepository;
-        $this->customerPackages = $customerPackages;
-        $this->customerPackagesRepository = $customerPackagesRepository;
-        $this->composerRepoRepository = $composerRepoRepository;
-        $this->customerAuth = $customerAuth;
-        $this->customerAuthFactory = $customerAuthFactory;
-        $this->customerPackagesFactory = $customerPackagesFactory;
+        $this->dataHelper             = $dataHelper;
+        $this->fileFactory            = $fileFactory;
+        $this->customerAuth           = $customerAuth;
+        $this->searchCriteria         = $searchCriteria;
+        $this->filterBuilder          = $filterBuilder;
+        $this->versionRepository      = $versionRepository;
+        $this->resultJsonFactory      = $resultJsonFactory;
+        $this->packagesRepository     = $packagesRepository;
         $this->customerAuthRepository = $customerAuthRepository;
-        $this->searchCriteria = $searchCriteria;
-        $this->versionRepository = $versionRepository;
-        $this->filterBuilder = $filterBuilder;
-        $this->versionModel = $versionModel;
+        parent::__construct($context);
     }
 
     public function execute()
     {
-        $authKey = $this->getRequest()->getServer('PHP_AUTH_USER');
-
-        if (!$authKey) {
+        /**
+         * Defined variables to authentication keys, secret keys, paramNameRequest etc.
+         */
+        $request = $this->getRequest();
+        $ds      = DIRECTORY_SEPARATOR;
+        $baseDir = DirectoryList::VAR_DIR;
+        $fileFactory      = $this->fileFactory;
+        $contentType      = 'application/octet-stream';
+        $configHelper     = $this->dataHelper;
+        $publicKey        = $request->getServer('PHP_AUTH_USER');
+        $privateKey       = $request->getServer('PHP_AUTH_PW');
+        $paramNameRequest = $request->getParam('m');
+        $packagePathDir   = $configHelper->getConfigAbsoluteDir();
+        $versionRequest   = $request->getParam('v');
+        
+        if (!$publicKey) {
             $this->unAuthResponse();
             return false;
         }
 
-        $authCriteriaBuilder = $this->searchCriteria;
-        $authCriteria = $authCriteriaBuilder->addFilter(
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder->addFilter(
             'auth_key',
-            $authKey,
+            $publicKey,
             'eq'
         )->create();
+        $authenticationList = $this->customerAuthRepository->getList($searchCriteria);
+        $items = $authenticationList->getItems();
 
-        $authList = $this->customerAuthRepository->getList($authCriteria);
-        $items = $authList->getItems();
         if (empty($items)) {
             $this->unAuthResponse();
             return false;
@@ -191,15 +118,12 @@ class Download extends AbstractAccount
 
         $item = end($items);
 
-        $authSecret = $this->getRequest()->getServer('PHP_AUTH_PW');
-
-        if ($item->getData('auth_secret') !== $authSecret) {
+        if ($item->getData('auth_secret') !== $privateKey) {
             $this->unAuthResponse();
             return false;
         }
 
-        $packageName = str_replace('_', '/', $this->getRequest()->getParam('m'));
-        $version = $this->getRequest()->getParam('v');
+        $packageName = str_replace('_', '/', $paramNameRequest);
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder->addFilter(
@@ -207,22 +131,22 @@ class Download extends AbstractAccount
             $packageName,
             'eq'
         )->create();
-        $packageFiles = $this->packagesRepository->getList($searchCriteria);
-        $packagesItems = $packageFiles->getItems();
+        $packagesFiles = $this->packagesRepository->getList($searchCriteria);
+        $packagesItems = $packagesFiles->getItems();
 
         foreach ($packagesItems as $item) {
-            $packageId = $item->getData('entity_id');
+            $entityId = $item->getData('entity_id');
         }
 
-        $packageFilter[] = $this->filterBuilder
-            ->setField('version')
-            ->setValue($version)
-            ->setConditionType('eq')
-            ->create();
+//        $packageFilter[] = $this->filterBuilder
+//            ->setField('version')
+//            ->setValue($version)
+//            ->setConditionType('eq')
+//            ->create();
 
         $packageFilter[] = $this->filterBuilder
             ->setField('package_id')
-            ->setValue($packageId)
+            ->setValue($entityId)
             ->setConditionType('eq')
             ->create();
 
@@ -231,23 +155,17 @@ class Download extends AbstractAccount
             ->addFilters($packageFilter)
             ->create();
         $versionFile = $this->versionRepository->getList($searchCriteria);
-        $items = $versionFile->getItems();
+        $itemsPackageVersion = $versionFile->getItems();
+        $lastItem = end($itemsPackageVersion);
 
-        $item = end($items);
+        $versionPackageData = $lastItem;
+        $file = $versionPackageData->getData('file');
 
-        $fileData = $item;
-        $file = $fileData->getData('file');
-
-        $packageDir = $this->dataHelper->getConfigAbsoluteDir();
-        $correctPath = $packageDir . DIRECTORY_SEPARATOR . $packageName . DIRECTORY_SEPARATOR . $file;
+        $correctPathFile = $packagePathDir . $ds . $packageName . $ds . $file;
 
         $fileName = $file;
-        $content = file_get_contents($correctPath, true);
-        $fileDownload = $this->fileFactory->create($fileName,
-            $content,
-            DirectoryList::VAR_DIR,
-            'application/octet-stream'
-        );
+        $content = file_get_contents($correctPathFile, true);
+        $fileDownload = $fileFactory->create($fileName, $content, $baseDir, $contentType);
 
         return $fileDownload;
     }
