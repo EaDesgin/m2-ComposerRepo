@@ -21,7 +21,8 @@ use Magento\Framework\App\Response\Http\FileFactory;
 use Eadesigndev\ComposerRepo\Model\Packages\VersionRepository;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
-
+use Magento\Framework\Api\FilterBuilder;
+use Eadesigndev\ComposerRepo\Model\Packages\Version;
 
 /**
  * Class Download
@@ -94,6 +95,12 @@ class Download extends AbstractAccount
      * @var SearchCriteriaBuilder
      */
     private $searchCriteria;
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    private $versionModel;
 
     /**
      * Packagist constructor.
@@ -114,6 +121,7 @@ class Download extends AbstractAccount
      * @param CustomerAuthRepository $customerAuthRepository
      * @param SearchCriteriaBuilder $searchCriteria
      * @param VersionRepository $versionRepository
+     * @param FilterBuilder $filterBuilder
      */
 
     public function __construct(
@@ -133,7 +141,9 @@ class Download extends AbstractAccount
         CustomerPackagesFactory $customerPackagesFactory,
         CustomerAuthRepository $customerAuthRepository,
         SearchCriteriaBuilder $searchCriteria,
-        VersionRepository $versionRepository
+        VersionRepository $versionRepository,
+        FilterBuilder $filterBuilder,
+        Version $versionModel
     ) {
         parent::__construct($context);
         $this->session = $session;
@@ -152,6 +162,8 @@ class Download extends AbstractAccount
         $this->customerAuthRepository = $customerAuthRepository;
         $this->searchCriteria = $searchCriteria;
         $this->versionRepository = $versionRepository;
+        $this->filterBuilder = $filterBuilder;
+        $this->versionModel = $versionModel;
     }
 
     public function execute()
@@ -191,10 +203,33 @@ class Download extends AbstractAccount
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'version',
-            $version,
+            'name',
+            $packageName,
             'eq'
         )->create();
+        $packageFiles = $this->packagesRepository->getList($searchCriteria);
+        $packagesItems = $packageFiles->getItems();
+
+        foreach ($packagesItems as $item) {
+            $packageId = $item->getData('entity_id');
+        }
+
+        $packageFilter[] = $this->filterBuilder
+            ->setField('version')
+            ->setValue($version)
+            ->setConditionType('eq')
+            ->create();
+
+        $packageFilter[] = $this->filterBuilder
+            ->setField('package_id')
+            ->setValue($packageId)
+            ->setConditionType('eq')
+            ->create();
+
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilters($packageFilter)
+            ->create();
         $versionFile = $this->versionRepository->getList($searchCriteria);
         $items = $versionFile->getItems();
 
@@ -208,8 +243,7 @@ class Download extends AbstractAccount
 
         $fileName = $file;
         $content = file_get_contents($correctPath, true);
-        $fileDownload = $this->fileFactory->create(
-            $fileName,
+        $fileDownload = $this->fileFactory->create($fileName,
             $content,
             DirectoryList::VAR_DIR,
             'application/octet-stream'
