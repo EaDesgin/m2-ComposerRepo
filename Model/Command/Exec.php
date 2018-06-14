@@ -286,7 +286,7 @@ class Exec extends AbstractModel
                         $customPackage->save();
                     }
 
-                    if ($updatePackageData) {
+                    if (true) {
                         if ($packageModel->getData('status') == 1) {
                             $packageModel->setPackageJson(json_encode($versions))->save();
                         }
