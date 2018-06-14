@@ -191,7 +191,6 @@ class Exec extends AbstractModel
 
                     $versions = [];
                     $latestVersion = '0.0.0.0';
-                    $updatePackageData = false;
                     if (!$getConfig->getConfigDevMaster() && isset($packageData['dev-mas'])) {
                         $this->printLn(' - Removing dev-master from available packages');
                         unset($packageData['dev-master']);
@@ -225,7 +224,6 @@ class Exec extends AbstractModel
                             $versionFactory->setVersion($versionNr);
 
                             $versionModel = $this->versionRepository->save($versionFactory);
-                            $updatePackageData = true;
                             $this->printLn(' - Saving new version: ' . $versionNr);
                         }
                         if (strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
@@ -234,7 +232,6 @@ class Exec extends AbstractModel
                             $versionFactory->setVersion($versionNr);
 
                             $this->versionRepository->save($versionFactory);
-                            $updatePackageData = true;
                             $this->printLn(' - Saving updated version reference: ' . $versionNr);
                         }
 
@@ -255,7 +252,6 @@ class Exec extends AbstractModel
 
                     if ($packageModel->getVersion() != $latestVersion) {
                         $packageModel->setVersion($latestVersion);
-                        $updatePackageData = true;
 
                         $searchCriteriaBuilder = $this->searchCriteria;
                         $filters = [
@@ -282,19 +278,17 @@ class Exec extends AbstractModel
                             $customerPackagesFactory = $this->customerPackagesFactory->create();
                             $customerPackagesFactory->setLastAllowedVersion($latestVersion);
                         }
-
                         $customPackage->save();
                     }
 
-                    if (true) {
-                        if ($packageModel->getData('status') == 1) {
-                            $packageModel->setPackageJson(json_encode($versions))->save();
-                        }
+                    if ($packageModel->getData('status') == 1) {
+                        $packageModel->setPackageJson(json_encode($versions))->save();
                     }
                 }
             }
         }
     }
+
 
     protected function json($array)
     {
