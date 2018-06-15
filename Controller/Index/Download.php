@@ -2,6 +2,14 @@
 /**
  * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
  * See LICENSE for license details.
+ *
+ * 
+ * $versionRequest   = $request->getParam('v');
+ * $packageFilter[] = $this->filterBuilder
+ * ->setField('version')
+ * ->setValue($version)
+ * ->setConditionType('eq')
+ * ->create();
  */
 
 namespace Eadesigndev\ComposerRepo\Controller\Index;
@@ -95,8 +103,7 @@ class Download extends AbstractAccount
         $privateKey       = $request->getServer('PHP_AUTH_PW');
         $paramNameRequest = $request->getParam('m');
         $packagePathDir   = $configHelper->getConfigAbsoluteDir();
-        $versionRequest   = $request->getParam('v');
-        
+
         if (!$publicKey) {
             $this->unAuthResponse();
             return false;
@@ -137,12 +144,6 @@ class Download extends AbstractAccount
         foreach ($packagesItems as $item) {
             $entityId = $item->getData('entity_id');
         }
-
-//        $packageFilter[] = $this->filterBuilder
-//            ->setField('version')
-//            ->setValue($version)
-//            ->setConditionType('eq')
-//            ->create();
 
         $packageFilter[] = $this->filterBuilder
             ->setField('package_id')
