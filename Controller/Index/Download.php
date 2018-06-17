@@ -2,8 +2,10 @@
 /**
  * Copyright © 2018 EaDesign by Eco Active S.R.L. All rights reserved.
  * See LICENSE for license details.
- *
- * 
+ */
+
+/**
+ * This code sequence will be added if you want to implement the method to filter by version.
  * $versionRequest   = $request->getParam('v');
  * $packageFilter[] = $this->filterBuilder
  * ->setField('version')
