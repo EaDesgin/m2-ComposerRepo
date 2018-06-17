@@ -95,9 +95,9 @@ class Download extends AbstractAccount
         /**
          * Defined variables to authentication keys, secret keys, paramNameRequest etc.
          */
-        $request = $this->getRequest();
-        $ds      = DIRECTORY_SEPARATOR;
-        $baseDir = DirectoryList::VAR_DIR;
+        $request          = $this->getRequest();
+        $ds               = DIRECTORY_SEPARATOR;
+        $baseDir          = DirectoryList::VAR_DIR;
         $fileFactory      = $this->fileFactory;
         $contentType      = 'application/octet-stream';
         $configHelper     = $this->dataHelper;
@@ -111,15 +111,7 @@ class Download extends AbstractAccount
             return false;
         }
 
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'auth_key',
-            $publicKey,
-            'eq'
-        )->create();
-        $authenticationList = $this->customerAuthRepository->getList($searchCriteria);
-        $items = $authenticationList->getItems();
-
+        $items = $this->itemsList();
         if (empty($items)) {
             $this->unAuthResponse();
             return false;
@@ -171,6 +163,23 @@ class Download extends AbstractAccount
         $fileDownload = $fileFactory->create($fileName, $content, $baseDir, $contentType);
 
         return $fileDownload;
+    }
+
+    private function itemsList()
+    {
+        $request = $this->getRequest();
+        $publicKey = $request->getServer('PHP_AUTH_USER');
+
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder->addFilter(
+            'auth_key',
+            $publicKey,
+            'eq'
+        )->create();
+        $authenticationList = $this->customerAuthRepository->getList($searchCriteria);
+        $items = $authenticationList->getItems();
+
+        return $items;
     }
 
     private function unAuthResponse()
