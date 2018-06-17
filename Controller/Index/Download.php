@@ -122,6 +122,9 @@ class Download extends AbstractAccount
         return $fileDownload;
     }
 
+    /**
+     * This function return items after authentication;
+     */
     private function itemsList()
     {
         /**
@@ -142,6 +145,9 @@ class Download extends AbstractAccount
         return $items;
     }
 
+    /**
+     * This function return list of packages items;
+     */
     private function packageItems()
     {
         /**
@@ -164,7 +170,11 @@ class Download extends AbstractAccount
         return $packagesItems;
     }
 
-    private function lastItem()
+    /**
+     * This function packageFilter() is created, to a filter the items after package_id.
+     * @return mixed
+     */
+    private function packageFilter()
     {
         $packagesItems = $this->packageItems();
         foreach ($packagesItems as $item) {
@@ -188,6 +198,9 @@ class Download extends AbstractAccount
         return $lastItem;
     }
 
+    /**
+     * The function fileDownload(), return final file and download it.
+     */
     private function fileDownload()
     {
         /**
@@ -202,7 +215,7 @@ class Download extends AbstractAccount
         $paramNameRequest = $request->getParam('m');
         $packagePathDir   = $configHelper->getConfigAbsoluteDir();
 
-        $lastItem = $this->lastItem();
+        $lastItem = $this->packageFilter();
         $versionPackageData = $lastItem;
         $file = $versionPackageData->getData('file');
 
