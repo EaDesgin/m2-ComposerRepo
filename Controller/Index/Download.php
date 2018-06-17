@@ -124,17 +124,7 @@ class Download extends AbstractAccount
             return false;
         }
 
-        $packageName = str_replace('_', '/', $paramNameRequest);
-
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder->addFilter(
-            'name',
-            $packageName,
-            'eq'
-        )->create();
-        $packagesFiles = $this->packagesRepository->getList($searchCriteria);
-        $packagesItems = $packagesFiles->getItems();
-
+        $packagesItems = $this->packageItems();
         foreach ($packagesItems as $item) {
             $entityId = $item->getData('entity_id');
         }
@@ -156,6 +146,7 @@ class Download extends AbstractAccount
         $versionPackageData = $lastItem;
         $file = $versionPackageData->getData('file');
 
+        $packageName = str_replace('_', '/', $paramNameRequest);
         $correctPathFile = $packagePathDir . $ds . $packageName . $ds . $file;
 
         $fileName = $file;
@@ -180,6 +171,25 @@ class Download extends AbstractAccount
         $items = $authenticationList->getItems();
 
         return $items;
+    }
+
+    private function packageItems()
+    {
+        $request          = $this->getRequest();
+        $paramNameRequest = $request->getParam('m');
+
+        $packageName = str_replace('_', '/', $paramNameRequest);
+
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder->addFilter(
+            'name',
+            $packageName,
+            'eq'
+        )->create();
+        $packagesFiles = $this->packagesRepository->getList($searchCriteria);
+        $packagesItems = $packagesFiles->getItems();
+
+        return $packagesItems;
     }
 
     private function unAuthResponse()
