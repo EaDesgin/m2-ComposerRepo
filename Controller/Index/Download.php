@@ -93,18 +93,11 @@ class Download extends AbstractAccount
     public function execute()
     {
         /**
-         * Defined variables to authentication keys, secret keys, paramNameRequest etc.
+         * Defined variables
          */
         $request          = $this->getRequest();
-        $ds               = DIRECTORY_SEPARATOR;
-        $baseDir          = DirectoryList::VAR_DIR;
-        $fileFactory      = $this->fileFactory;
-        $contentType      = 'application/octet-stream';
-        $configHelper     = $this->dataHelper;
         $publicKey        = $request->getServer('PHP_AUTH_USER');
         $privateKey       = $request->getServer('PHP_AUTH_PW');
-        $paramNameRequest = $request->getParam('m');
-        $packagePathDir   = $configHelper->getConfigAbsoluteDir();
 
         if (!$publicKey) {
             $this->unAuthResponse();
@@ -124,22 +117,16 @@ class Download extends AbstractAccount
             return false;
         }
 
-        $lastItem = $this->lastItem();
-        $versionPackageData = $lastItem;
-        $file = $versionPackageData->getData('file');
-
-        $packageName = str_replace('_', '/', $paramNameRequest);
-        $correctPathFile = $packagePathDir . $ds . $packageName . $ds . $file;
-
-        $fileName = $file;
-        $content = file_get_contents($correctPathFile, true);
-        $fileDownload = $fileFactory->create($fileName, $content, $baseDir, $contentType);
+        $fileDownload = $this->fileDownload();
 
         return $fileDownload;
     }
 
     private function itemsList()
     {
+        /**
+         * Defined variables
+         */
         $request = $this->getRequest();
         $publicKey = $request->getServer('PHP_AUTH_USER');
 
@@ -157,6 +144,9 @@ class Download extends AbstractAccount
 
     private function packageItems()
     {
+        /**
+         * Defined variables
+         */
         $request          = $this->getRequest();
         $paramNameRequest = $request->getParam('m');
 
@@ -197,7 +187,35 @@ class Download extends AbstractAccount
 
         return $lastItem;
     }
-    
+
+    private function fileDownload()
+    {
+        /**
+         * Defined variables
+         */
+        $configHelper     = $this->dataHelper;
+        $request          = $this->getRequest();
+        $ds               = DIRECTORY_SEPARATOR;
+        $baseDir          = DirectoryList::VAR_DIR;
+        $fileFactory      = $this->fileFactory;
+        $contentType      = 'application/octet-stream';
+        $paramNameRequest = $request->getParam('m');
+        $packagePathDir   = $configHelper->getConfigAbsoluteDir();
+
+        $lastItem = $this->lastItem();
+        $versionPackageData = $lastItem;
+        $file = $versionPackageData->getData('file');
+
+        $packageName = str_replace('_', '/', $paramNameRequest);
+        $correctPathFile = $packagePathDir . $ds . $packageName . $ds . $file;
+
+        $fileName = $file;
+        $content = file_get_contents($correctPathFile, true);
+        $fileDownload = $fileFactory->create($fileName, $content, $baseDir, $contentType);
+
+        return $fileDownload;
+    }
+
     private function unAuthResponse()
     {
         $this->getResponse()
