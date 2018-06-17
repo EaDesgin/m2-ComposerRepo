@@ -124,25 +124,7 @@ class Download extends AbstractAccount
             return false;
         }
 
-        $packagesItems = $this->packageItems();
-        foreach ($packagesItems as $item) {
-            $entityId = $item->getData('entity_id');
-        }
-
-        $packageFilter[] = $this->filterBuilder
-            ->setField('package_id')
-            ->setValue($entityId)
-            ->setConditionType('eq')
-            ->create();
-
-        $searchCriteriaBuilder = $this->searchCriteria;
-        $searchCriteria = $searchCriteriaBuilder
-            ->addFilters($packageFilter)
-            ->create();
-        $versionFile = $this->versionRepository->getList($searchCriteria);
-        $itemsPackageVersion = $versionFile->getItems();
-        $lastItem = end($itemsPackageVersion);
-
+        $lastItem = $this->lastItem();
         $versionPackageData = $lastItem;
         $file = $versionPackageData->getData('file');
 
@@ -192,6 +174,30 @@ class Download extends AbstractAccount
         return $packagesItems;
     }
 
+    private function lastItem()
+    {
+        $packagesItems = $this->packageItems();
+        foreach ($packagesItems as $item) {
+            $entityId = $item->getData('entity_id');
+        }
+
+        $packageFilter[] = $this->filterBuilder
+            ->setField('package_id')
+            ->setValue($entityId)
+            ->setConditionType('eq')
+            ->create();
+
+        $searchCriteriaBuilder = $this->searchCriteria;
+        $searchCriteria = $searchCriteriaBuilder
+            ->addFilters($packageFilter)
+            ->create();
+        $versionFile = $this->versionRepository->getList($searchCriteria);
+        $itemsPackageVersion = $versionFile->getItems();
+        $lastItem = end($itemsPackageVersion);
+
+        return $lastItem;
+    }
+    
     private function unAuthResponse()
     {
         $this->getResponse()
