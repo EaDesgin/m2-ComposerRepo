@@ -4,8 +4,8 @@
          xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
     <argument name="data" xsi:type="array">
         <item name="js_config" xsi:type="array">
-            <item name="provider" xsi:type="string">xtea_fields_listing.fields_data_source</item>
-            <item name="deps" xsi:type="string">xtea_fields_listing.fields_data_source</item>
+            <item name="provider" xsi:type="string">xtea_comperrepo_listing.comperrepo_data_source</item>
+            <item name="deps" xsi:type="string">xtea_comperrepo_listing.comperrepo_data_source</item>
         </item>
         <item name="spinner" xsi:type="string">fields_columns</item>
         <item name="buttons" xsi:type="array">
@@ -17,10 +17,10 @@
             </item>
         </item>
     </argument>
-    <dataSource name="fields_data_source">
+    <dataSource name="comperrepo_data_source">
         <argument name="dataProvider" xsi:type="configurableObject">
             <argument name="class" xsi:type="string">FieldsGridDataProvider</argument>
-            <argument name="name" xsi:type="string">fields_data_source</argument>
+            <argument name="name" xsi:type="string">comperrepo_data_source</argument>
             <argument name="primaryFieldName" xsi:type="string">entity_id</argument>
             <argument name="requestFieldName" xsi:type="string">id</argument>
             <argument name="data" xsi:type="array">
@@ -52,7 +52,7 @@
                     <item name="storageConfig" xsi:type="array">
                         <item name="saveUrl" xsi:type="url" path="mui/bookmark/save"/>
                         <item name="deleteUrl" xsi:type="url" path="mui/bookmark/delete"/>
-                        <item name="namespace" xsi:type="string">xtea_fields_listing</item>
+                        <item name="namespace" xsi:type="string">xtea_comperrepo_listing</item>
                     </item>
                 </item>
             </argument>
@@ -61,7 +61,7 @@
             <argument name="data" xsi:type="array">
                 <item name="config" xsi:type="array">
                     <item name="columnsData" xsi:type="array">
-                        <item name="provider" xsi:type="string">xtea_fields_listing.xtea_fields_listing.fields_columns
+                        <item name="provider" xsi:type="string">xtea_comperrepo_listing.xtea_comperrepo_listing.fields_columns
                         </item>
                     </item>
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/controls/columns</item>
@@ -74,13 +74,13 @@
                 <item name="config" xsi:type="array">
                     <item name="component" xsi:type="string">Magento_Ui/js/grid/search/search</item>
                     <item name="displayArea" xsi:type="string">dataGridFilters</item>
-                    <item name="provider" xsi:type="string">xtea_fields_listing.fields_data_source</item>
+                    <item name="provider" xsi:type="string">xtea_comperrepo_listing.comperrepo_data_source</item>
                     <item name="chipsProvider" xsi:type="string">
-                        xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters_chips
+                        xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.listing_filters_chips
                     </item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">
-                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                            xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.bookmarks
                         </item>
                         <item name="namespace" xsi:type="string">current.search</item>
                     </item>
@@ -94,17 +94,17 @@
                     <item name="dataScope" xsi:type="string">filters</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">
-                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                            xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.bookmarks
                         </item>
                         <item name="namespace" xsi:type="string">current.filters</item>
                     </item>
                     <item name="childDefaults" xsi:type="array">
                         <item name="provider" xsi:type="string">
-                            xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                            xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.listing_filters
                         </item>
                         <item name="imports" xsi:type="array">
                             <item name="visible" xsi:type="string">
-                                xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks:current.columns.${ $.index }.visible
+                                xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.bookmarks:current.columns.${ $.index }.visible
                             </item>
                         </item>
                     </item>
@@ -117,7 +117,7 @@
                         <item name="label" xsi:type="string" translate="true">ID</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">
-                                xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                                xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.listing_filters
                             </item>
                         </item>
                     </item>
@@ -183,7 +183,7 @@
                         <item name="label" xsi:type="string" translate="true">Created</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">
-                                xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                                xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.listing_filters
                             </item>
                         </item>
                     </item>
@@ -216,7 +216,7 @@
                         <item name="label" xsi:type="string" translate="true">Modified</item>
                         <item name="childDefaults" xsi:type="array">
                             <item name="provider" xsi:type="string">
-                                xtea_fields_listing.xtea_fields_listing.listing_top.listing_filters
+                                xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.listing_filters
                             </item>
                         </item>
                     </item>
@@ -267,12 +267,12 @@
                 <item name="config" xsi:type="array">
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">
-                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                            xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.bookmarks
                         </item>
                         <item name="namespace" xsi:type="string">current.paging</item>
                     </item>
                     <item name="selectProvider" xsi:type="string">
-                        xtea_fields_listing.xtea_fields_listing.fields_columns.ids
+                        xtea_comperrepo_listing.xtea_comperrepo_listing.fields_columns.ids
                     </item>
                     <item name="displayArea" xsi:type="string">bottom</item>
                     <item name="options" xsi:type="array">
@@ -306,14 +306,14 @@
             <item name="config" xsi:type="array">
                 <item name="storageConfig" xsi:type="array">
                     <item name="provider" xsi:type="string">
-                        xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                        xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.bookmarks
                     </item>
                     <item name="namespace" xsi:type="string">current</item>
                 </item>
                 <item name="childDefaults" xsi:type="array">
                     <item name="fieldAction" xsi:type="array">
                         <item name="provider" xsi:type="string">
-                            xtea_fields_listing.xtea_fields_listing.fields_columns.actions
+                            xtea_comperrepo_listing.xtea_comperrepo_listing.fields_columns.actions
                         </item>
                         <item name="target" xsi:type="string">applyAction</item>
                         <item name="params" xsi:type="array">
@@ -324,7 +324,7 @@
                     <item name="controlVisibility" xsi:type="boolean">true</item>
                     <item name="storageConfig" xsi:type="array">
                         <item name="provider" xsi:type="string">
-                            xtea_fields_listing.xtea_fields_listing.listing_top.bookmarks
+                            xtea_comperrepo_listing.xtea_comperrepo_listing.listing_top.bookmarks
                         </item>
                         <item name="root" xsi:type="string">columns.${ $.index }</item>
                         <item name="namespace" xsi:type="string">current.${ $.storageConfig.root}</item>

@@ -4,7 +4,7 @@
     <update handle="styles"/>
     <body>
         <referenceContainer name="content">
-            <uiComponent name="xtea_fields_listing"/>
+            <uiComponent name="xtea_comperrepo_listing"/>
         </referenceContainer>
     </body>
 </page>
