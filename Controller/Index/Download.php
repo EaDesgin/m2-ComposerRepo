@@ -65,6 +65,7 @@ class Download extends AbstractAccount
      * @param SearchCriteriaBuilder $searchCriteria
      * @param VersionRepository $versionRepository
      * @param FilterBuilder $filterBuilder
+     * @SuppressWarnings(PHPMD)
      */
     public function __construct(
         Context $context,

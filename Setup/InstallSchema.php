@@ -11,6 +11,7 @@ use Magento\Framework\DB\Ddl\Table;
 
 /**
  * @codeCoverageIgnore
+ * @SuppressWarnings(PHPMD)
  */
 class InstallSchema implements InstallSchemaInterface
 {

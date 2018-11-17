@@ -37,27 +37,4 @@ class PostDataProcessor
 
         return (new \Zend_Filter_Input($filterRules, [], $data))->getUnescaped();
     }
-
-    /**
-     * Validate post data
-     *
-     * @param array $data
-     * @return bool     Return FALSE if some item is invalid
-     */
-    public function validate($data)
-    {
-        return true;
-    }
-
-    /**
-     * Check if required fields is not empty
-     *
-     * @param array $data
-     * @return bool
-     */
-    public function validateRequireEntry(array $data)
-    {
-        $errorNo = true;
-        return $errorNo;
-    }
 }

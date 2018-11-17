@@ -10,6 +10,11 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource as AbstractResourceModel;
 use Magento\Framework\Registry;
 
+/**
+ * Class ComposerRepo
+ * @package Eadesigndev\ComposerRepo\Model
+ *
+ */
 class ComposerRepo extends AbstractModel implements ComposerInterface
 {
     public function __construct(
