@@ -20,5 +20,4 @@ interface CustomerAuthRepositoryInterface
     public function deleteById($value);
 
     public function getList(SearchCriteriaInterface $searchCriteria);
-
 }

@@ -289,7 +289,6 @@ class Exec extends AbstractModel
         }
     }
 
-
     protected function json($array)
     {
         return json_encode($array, JSON_NUMERIC_CHECK | JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);

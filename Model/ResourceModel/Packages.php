@@ -28,11 +28,13 @@ class Packages extends AbstractDb
         );
     }
 
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_init(InstallSchema::TABLE, ComposerInterface::ENTITY_ID);
     }
 
+    // @codingStandardsIgnoreLine
     public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
     {
         if (!$object->getId()) {

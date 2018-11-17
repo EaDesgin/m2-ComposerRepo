@@ -132,11 +132,11 @@ class SalesOrderInvoicePay implements ObserverInterface
         $itemsCollection = $invoice->getItemsCollection();
         /** @var Item $item */
         foreach ($itemsCollection as $item) {
-
             $searchCriteria = $searchCriteriaBuilder->addFilter(
                 'product_id',
                 $item->getProductId(),
-                'eq')->create();
+                'eq'
+            )->create();
             $package = $this->composerRepoRepository->getList($searchCriteria);
             $items = $package->getItems();
             $lastElementPackage = end($items);

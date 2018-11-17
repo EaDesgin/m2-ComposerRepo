@@ -28,6 +28,7 @@ class CustomerAuth extends AbstractDb
         );
     }
 
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_init(InstallSchema::TABLE_AUTH, ComposerInterface::ENTITY_ID);

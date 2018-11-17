@@ -14,8 +14,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 class Save extends Action
 {
-//    private $dataProcessor;
-
     private $dataPersistor;
 
     private $composerRepoRepository;
@@ -24,12 +22,10 @@ class Save extends Action
 
     public function __construct(
         Context $context,
-//        PostDataProcessor $dataProcessor,
         DataPersistorInterface $dataPersistor,
         ComposerRepoRepository $composerRepoRepository,
         ComposerRepoFactory $composerRepoFactory
     ) {
-//        $this->dataProcessor = $dataProcessor;
         $this->dataPersistor = $dataPersistor;
         $this->composerRepoRepository = $composerRepoRepository;
         $this->composerRepoFactory = $composerRepoFactory;

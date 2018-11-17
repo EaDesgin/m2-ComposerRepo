@@ -77,8 +77,10 @@ class Packagist extends AbstractAccount
      */
     private $filterBuilder;
 
+    /**
+     * @var JsonFactory
+     */
     private $jsonResultFactory;
-
 
     /**
      * Packagist constructor.

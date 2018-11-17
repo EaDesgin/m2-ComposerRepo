@@ -20,5 +20,4 @@ interface NotifyRepositoryInterface
     public function deleteById($value);
 
     public function getList(SearchCriteriaInterface $searchCriteria);
-
 }

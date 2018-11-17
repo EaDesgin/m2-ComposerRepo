@@ -4,7 +4,6 @@
  * See LICENSE for license details.
  */
 
-
 namespace Eadesigndev\ComposerRepo\Model;
 
 interface NotifyFactoryInterface

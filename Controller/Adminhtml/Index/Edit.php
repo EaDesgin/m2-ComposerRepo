@@ -72,8 +72,6 @@ class Edit extends \Magento\Backend\App\Action
         }
         $this->registry->register('composer_data', $model);
 
-
-
         /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
         $resultPage = $this->resultPageFactory->create();
         $resultPage->setActiveMenu('Magento_Cms::cms_page');

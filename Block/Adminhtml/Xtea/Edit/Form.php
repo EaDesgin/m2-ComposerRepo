@@ -17,6 +17,7 @@ class Form extends Generic
     /**
      * @return $this
      */
+    // @codingStandardsIgnoreLine
     public function _prepareForm()
     {
         /** @var \Magento\Framework\Data\Form $form */

@@ -10,6 +10,7 @@ use Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterfaceFactory;
 use Eadesigndev\ComposerRepo\Model\CustomerPackagesFactory;
 use Eadesigndev\ComposerRepo\Model\ResourceModel\Customer\CustomerPackages as CustomerPackagesResourceModel;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\Exception\LocalizedException as Exception;
 use Magento\Framework\Message\ManagerInterface;
 
@@ -150,8 +151,10 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
         return $this->buildSearchResult($searchCriteria, $collection);
     }
 
-    private function addFiltersToCollection(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
-    {
+    private function addFiltersToCollection(
+        SearchCriteriaInterface $searchCriteria,
+        CollectionCustomerPackages $collection
+    ) {
         foreach ($searchCriteria->getFilterGroups() as $filterGroup) {
             $fields = $conditions = [];
             foreach ($filterGroup->getFilters() as $filter) {
@@ -162,22 +165,28 @@ class CustomerPackagesRepository implements CustomerPackagesRepositoryInterface
         }
     }
 
-    private function addSortOrdersToCollection(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
-    {
+    private function addSortOrdersToCollection(
+        SearchCriteriaInterface $searchCriteria,
+        CollectionCustomerPackages $collection
+    ) {
         foreach ((array)$searchCriteria->getSortOrders() as $sortOrder) {
             $direction = $sortOrder->getDirection() == SortOrder::SORT_ASC ? 'asc' : 'desc';
             $collection->addOrder($sortOrder->getField(), $direction);
         }
     }
 
-    private function addPagingToCollection(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
-    {
+    private function addPagingToCollection(
+        SearchCriteriaInterface $searchCriteria,
+        CollectionCustomerPackages $collection
+    ) {
         $collection->setPageSize($searchCriteria->getPageSize());
         $collection->setCurPage($searchCriteria->getCurrentPage());
     }
 
-    private function buildSearchResult(SearchCriteriaInterface $searchCriteria, CollectionCustomerPackages $collection)
-    {
+    private function buildSearchResult(
+        SearchCriteriaInterface $searchCriteria,
+        CollectionCustomerPackages $collection
+    ) {
         $searchResults = $this->composerSearchResultsInterfaceFactory->create();
 
         $searchResults->setSearchCriteria($searchCriteria);

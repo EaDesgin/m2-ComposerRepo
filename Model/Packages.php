@@ -16,6 +16,7 @@ class Packages extends AbstractModel
     const PACKAGE_NORMAL = 0;
     const PACKAGE_BUNDLE = 1;
 
+    // @codingStandardsIgnoreLine
     protected function _construct()
     {
         $this->_init(ResourcePackages::class);

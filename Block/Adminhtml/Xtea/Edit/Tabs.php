@@ -16,6 +16,7 @@ class Tabs extends WidgetTabs
     /**
      * @return void
      */
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         parent::_construct();

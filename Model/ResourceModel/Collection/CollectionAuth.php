@@ -17,6 +17,7 @@ class CollectionAuth extends AbstractCollection
      * Init resource model
      * @return void
      */
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
 

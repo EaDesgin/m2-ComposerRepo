@@ -28,6 +28,7 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
         );
     }
 
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_init(ComposerRepoResourceModel::class);
@@ -143,7 +144,6 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
         return $this->getData(ComposerInterface::FILE);
     }
 
-
     public function setEntityId($entityId)
     {
         $this->setData(ComposerInterface::ENTITY_ID, $entityId);
@@ -253,5 +253,4 @@ class ComposerRepo extends AbstractModel implements ComposerInterface
     {
         $this->setData(ComposerInterface::FILE, $file);
     }
-
 }

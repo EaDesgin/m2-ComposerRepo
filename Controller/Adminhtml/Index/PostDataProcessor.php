@@ -4,24 +4,19 @@ namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Fields;
 
 use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\Date;
-use Magento\Framework\View\Model\Layout\Update\ValidatorFactory;
 
 class PostDataProcessor
 {
     private $dateFilter;
 
-    private $validatorFactory;
-
     private $messageManager;
 
     public function __construct(
         Date $dateFilter,
-        ManagerInterface $messageManager,
-        ValidatorFactory $validatorFactory
+        ManagerInterface $messageManager
     ) {
         $this->dateFilter       = $dateFilter;
         $this->messageManager   = $messageManager;
-        $this->validatorFactory = $validatorFactory;
     }
 
     /**

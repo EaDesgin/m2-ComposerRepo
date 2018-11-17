@@ -11,9 +11,9 @@ use Magento\Framework\Model\AbstractModel;
  */
 class Version extends AbstractModel
 {
+    // @codingStandardsIgnoreLine
     protected function _construct()
     {
         $this->_init(VersionResource::class);
     }
-
 }

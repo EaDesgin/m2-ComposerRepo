@@ -13,6 +13,7 @@ class AddButton extends Container
     /**
      * @return void;
      */
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_controller = 'adminhtml_composerrepo';
@@ -33,6 +34,7 @@ class AddButton extends Container
      * @param $resourceId
      * @return bool
      */
+    // @codingStandardsIgnoreLine
     public function _isAllowedAction($resourceId)
     {
         return $this->_authorization->isAllowed($resourceId);

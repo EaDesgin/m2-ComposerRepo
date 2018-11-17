@@ -76,6 +76,7 @@ class General extends Generic implements TabInterface
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
+    // @codingStandardsIgnoreLine
     public function _prepareForm()
     {
         /** @var ComposerRepo $model */
@@ -232,6 +233,4 @@ class General extends Generic implements TabInterface
     {
         return false;
     }
-
-
 }

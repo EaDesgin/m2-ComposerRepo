@@ -28,17 +28,9 @@ class Version extends AbstractDb
         );
     }
 
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_init(InstallSchema::TABLE_PACKAGES_VERSIONS, ComposerInterface::ENTITY_ID);
-    }
-
-    public function _beforeSave(\Magento\Framework\Model\AbstractModel $object)
-    {
-        if (!$object->getId()) {
-//            $object->setCreatedate(now());
-        }
-
-        return parent::_beforeSave($object);
     }
 }
