@@ -207,9 +207,8 @@ class Exec extends AbstractModel
                     }
                 }
 
-                if ($packageModel->getVersion() != $latestVersion) {
-                    $this->customerPackageUpdates($packageModel, $latestVersion, $idPackage);
-                }
+                $this->customerPackageUpdates($packageModel, $latestVersion, $idPackage);
+                $packageModel->setVersion($latestVersion);
 
                 if ($packageModel->getData('status') == 1) {
                     $packageModel->setPackageJson(json_encode($versions))->save();
@@ -352,13 +351,12 @@ class Exec extends AbstractModel
     }
 
     /**
-     * @param $packageModel
+     * @param Packages $packageModel
      * @param $latestVersion
      * @param $idPackage
      */
     private function customerPackageUpdates($packageModel, $latestVersion, $idPackage): void
     {
-        $packageModel->setVersion($latestVersion);
 
         $searchCriteriaBuilder = $this->searchCriteria;
         $filters = [
@@ -380,11 +378,12 @@ class Exec extends AbstractModel
         $customerPackages = $customerPackagesList->getItems();
         $this->printLn(' - Updating max allowed version for customers');
 
-        foreach ($customerPackages as $customPackage) {
-            $this->printLn('   - ' . $customPackage->getCustomerId());
-            $customerPackagesFactory = $this->customerPackagesFactory->create();
-            $customerPackagesFactory->setLastAllowedVersion($latestVersion);
-            $customPackage->save();
+        foreach ($customerPackages as $customerPackage) {
+            if($packageModel->getId() === $customerPackage->getPackageId()) {
+                $this->printLn('   - ' . $customerPackage->getCustomerId() . ' - ' . $latestVersion);
+                $customerPackage->setData('last_allowed_version', $latestVersion);
+                $customerPackage->save();
+            }
         }
     }
 }

@@ -34,6 +34,9 @@ class Packages extends Template
      */
     private $searchCriteria;
 
+    /**
+     * @var Data
+     */
     private $dataHelper;
 
     /**
