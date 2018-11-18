@@ -21,6 +21,7 @@ use Magento\Framework\Api\FilterBuilder;
 /**
  * Class Packagist
  * @package Eadesigndev\ComposerRepo\Controller\Packagist
+ * @SuppressWarnings(coupling)
  */
 class Packagist extends AbstractAccount
 {
@@ -98,8 +99,8 @@ class Packagist extends AbstractAccount
      * @param CustomerAuthRepository $customerAuthRepository
      * @param SearchCriteriaBuilder $searchCriteria
      * @param FilterBuilder $filterBuilder
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-
     public function __construct(
         Context $context,
         Session $session,

@@ -50,7 +50,7 @@ class Data extends AbstractHelper
 
     /**
      * @param string $configPath
-     * @return bool
+     * @return string
      */
     public function getConfig($configPath)
     {

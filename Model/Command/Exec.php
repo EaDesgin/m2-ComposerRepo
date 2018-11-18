@@ -19,6 +19,11 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Registry;
 use Magento\Framework\Stdlib\DateTime\DateTime;
 
+/**
+ * Class Exec
+ * @package Eadesigndev\ComposerRepo\Model\Command
+ * @SuppressWarnings(PHPMD)
+ */
 class Exec extends AbstractModel
 {
     /**
@@ -88,6 +93,7 @@ class Exec extends AbstractModel
      * @param FilterBuilder $filterBuilder
      * @param PackagesRepository $packagesRepository
      * @param CustomerPackagesRepository $customerPackagesRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,

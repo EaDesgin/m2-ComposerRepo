@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SalesOrderInvoicePay
  * @package Eadesigndev\ComposerRepo\Observer\Sales
+ * @SuppressWarnings(coupling)
  */
 class SalesOrderInvoicePay implements ObserverInterface
 {
@@ -85,8 +86,8 @@ class SalesOrderInvoicePay implements ObserverInterface
      * @param CustomerPackagesRepository $customerPackagesRepository
      * @param CustomerPackagesFactory $customerPackagesFactory
      * @param ComposerRepoRepository $composerRepoRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-
     public function __construct(
         Packages $packages,
         Data $dataHelper,

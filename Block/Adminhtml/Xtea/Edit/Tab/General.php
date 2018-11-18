@@ -75,6 +75,7 @@ class General extends Generic implements TabInterface
     /**
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @SuppressWarnings(method)
      */
     // @codingStandardsIgnoreLine
     public function _prepareForm()
