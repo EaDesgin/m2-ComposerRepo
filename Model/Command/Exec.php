@@ -379,7 +379,7 @@ class Exec extends AbstractModel
         $this->printLn(' - Updating max allowed version for customers');
 
         foreach ($customerPackages as $customerPackage) {
-            if($packageModel->getId() === $customerPackage->getPackageId()) {
+            if ($packageModel->getId() === $customerPackage->getData('package_id')) {
                 $this->printLn('   - ' . $customerPackage->getCustomerId() . ' - ' . $latestVersion);
                 $customerPackage->setData('last_allowed_version', $latestVersion);
                 $customerPackage->save();
