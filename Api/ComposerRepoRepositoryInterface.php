@@ -20,5 +20,4 @@ interface ComposerRepoRepositoryInterface
     public function deleteById($value);
 
     public function getList(SearchCriteriaInterface $searchCriteria);
-
 }

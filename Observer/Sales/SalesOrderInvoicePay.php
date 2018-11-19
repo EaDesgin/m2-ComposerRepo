@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
 /**
  * Class SalesOrderInvoicePay
  * @package Eadesigndev\ComposerRepo\Observer\Sales
+ * @SuppressWarnings(coupling)
  */
 class SalesOrderInvoicePay implements ObserverInterface
 {
@@ -85,8 +86,8 @@ class SalesOrderInvoicePay implements ObserverInterface
      * @param CustomerPackagesRepository $customerPackagesRepository
      * @param CustomerPackagesFactory $customerPackagesFactory
      * @param ComposerRepoRepository $composerRepoRepository
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-
     public function __construct(
         Packages $packages,
         Data $dataHelper,
@@ -132,11 +133,11 @@ class SalesOrderInvoicePay implements ObserverInterface
         $itemsCollection = $invoice->getItemsCollection();
         /** @var Item $item */
         foreach ($itemsCollection as $item) {
-
             $searchCriteria = $searchCriteriaBuilder->addFilter(
                 'product_id',
                 $item->getProductId(),
-                'eq')->create();
+                'eq'
+            )->create();
             $package = $this->composerRepoRepository->getList($searchCriteria);
             $items = $package->getItems();
             $lastElementPackage = end($items);

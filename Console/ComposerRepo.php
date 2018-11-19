@@ -29,6 +29,12 @@ class ComposerRepo extends Command
         $this->setName('eadesign:composerrepo')->setDescription('Create packages.');
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int|null|void
+     * @SuppressWarnings("unused")
+     */
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $this->exec->run();

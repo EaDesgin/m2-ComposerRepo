@@ -106,31 +106,6 @@ abstract class AbstractCollection extends MagentoAbstractCollection
     }
 
     /**
-     * Add Composer filter to collection
-     *
-     * @param array|string $composer
-     * @param string|int|array|null $condition
-     * @return \Magento\Framework\Data\Collection\AbstractDb
-     */
-    public function addAwbToFilter($composer, $condition = null)
-    {
-        if ($composer === 'store_id') {
-            return $this->addStoreFilter($condition, false);
-        }
-
-        return parent::addComposerToFilter($composer, $condition);
-    }
-
-    /**
-     * Add filter by store
-     *
-     * @param int|array|Store $store
-     * @param bool $withAdmin
-     * @return $this
-     */
-    abstract public function addStoreFilter($store, $withAdmin = true);
-
-    /**
      * Perform adding filter by store
      *
      * @param int|array|Store $store

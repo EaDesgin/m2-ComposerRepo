@@ -31,8 +31,6 @@ interface ComposerInterface
     const REMOTE_IP            = 'remote_ip';
     const FILE                 = 'file';
 
-
-
     public function getEntityId();
 
     public function getCreatedAt();
@@ -77,10 +75,6 @@ interface ComposerInterface
 
     public function getFile();
 
-
-
-
-
     public function setEntityId($entityId);
 
     public function setCreatedAt($createdAt);
@@ -124,5 +118,4 @@ interface ComposerInterface
     public function setRemoteIp($remoteIp);
 
     public function setFile($file);
-
 }

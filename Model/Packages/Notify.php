@@ -7,6 +7,7 @@ use Magento\Framework\Model\AbstractModel;
 
 class Notify extends AbstractModel
 {
+    // @codingStandardsIgnoreLine
     protected function _construct()
     {
         $this->_init(NotifyResource::class);

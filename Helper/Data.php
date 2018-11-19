@@ -50,7 +50,7 @@ class Data extends AbstractHelper
 
     /**
      * @param string $configPath
-     * @return bool
+     * @return string
      */
     public function getConfig($configPath)
     {
@@ -59,6 +59,7 @@ class Data extends AbstractHelper
             ScopeInterface::SCOPE_STORE
         );
     }
+
     public function period($storeConfig = self::STORE_CONFIG)
     {
         return $this->getConfig($storeConfig);

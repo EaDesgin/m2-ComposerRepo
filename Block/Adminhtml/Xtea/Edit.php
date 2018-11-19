@@ -37,6 +37,7 @@ class Edit extends Container
      *
      * @return void
      */
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_objectId = 'entity_id';

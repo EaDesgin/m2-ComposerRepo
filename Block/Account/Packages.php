@@ -34,6 +34,9 @@ class Packages extends Template
      */
     private $searchCriteria;
 
+    /**
+     * @var Data
+     */
     private $dataHelper;
 
     /**
@@ -85,7 +88,7 @@ class Packages extends Template
 
     public function packages($item)
     {
-        $package = $this->packagesRepository->getById($item->getId());
+        $package = $this->packagesRepository->getById($item->getData('package_id'));
         $item->setData(self::PACKAGE, $package);
 
         return $item;

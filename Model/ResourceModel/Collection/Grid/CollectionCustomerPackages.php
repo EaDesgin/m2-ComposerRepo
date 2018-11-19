@@ -11,6 +11,7 @@ use Magento\Framework\Data\Collection\EntityFactoryInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\View\Element\UiComponent\DataProvider\Document;
 use Magento\Store\Model\StoreManagerInterface;
 use Psr\Log\LoggerInterface;
 
@@ -53,7 +54,7 @@ class CollectionCustomerPackages extends CustomerPackagesCollection implements S
         $eventPrefix,
         $eventObject,
         $resourceModel,
-        $model = 'Magento\Framework\View\Element\UiComponent\DataProvider\Document',
+        $model = Document::class,
         $connection = null,
         AbstractDb $resource = null
     ) {
@@ -146,5 +147,4 @@ class CollectionCustomerPackages extends CustomerPackagesCollection implements S
     {
         return $this;
     }
-
 }

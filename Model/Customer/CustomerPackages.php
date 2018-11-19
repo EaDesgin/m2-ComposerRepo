@@ -7,6 +7,7 @@ use Magento\Framework\Model\AbstractModel;
 
 class CustomerPackages extends AbstractModel
 {
+    // @codingStandardsIgnoreLine
     protected function _construct()
     {
         $this->_init(ResourceCustomerPackages::class);

@@ -28,6 +28,7 @@ class CustomerPackages extends AbstractDb
         );
     }
 
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_init(InstallSchema::TABLE_CUSTOMER_PACKAGE, ComposerInterface::ENTITY_ID);

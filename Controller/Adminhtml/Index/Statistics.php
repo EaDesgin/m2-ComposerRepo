@@ -5,7 +5,6 @@ namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
 
-
 class Statistics extends \Magento\Backend\App\Action
 {
 
@@ -56,6 +55,7 @@ class Statistics extends \Magento\Backend\App\Action
     /**
      * @return bool
      */
+    // @codingStandardsIgnoreLine
     public function _isAllowed()
     {
         return $this->_authorization->isAllowed(self::ADMIN_RESOURCE);

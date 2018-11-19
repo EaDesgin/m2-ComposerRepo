@@ -28,6 +28,7 @@ class ComposerRepo extends AbstractDb
         );
     }
 
+    // @codingStandardsIgnoreLine
     public function _construct()
     {
         $this->_init(InstallSchema::TABLE, ComposerInterface::ENTITY_ID);

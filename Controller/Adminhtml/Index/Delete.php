@@ -1,4 +1,5 @@
 <?php
+
 namespace Eadesigndev\ComposerRepo\Controller\Adminhtml\Index;
 
 use Eadesigndev\ComposerRepo\Api\ComposerRepoRepositoryInterface;
@@ -36,27 +37,17 @@ class Delete extends Action
     public function execute()
     {
         $id = $this->getRequest()->getParam('entity_id');
-//        $resultRedirect = $this->resultFactory->create();
 
         if ($id) {
             try {
                 /** @var ComposerRepo $field */
                 $this->composerRepoRepository->saveAndDeleteById($id);
                 $this->messageManager->addSuccessMessage(__('The field has been deleted.'));
-
-//                return $resultRedirect->setPath('*/*/');
             } catch (\Exception $e) {
-                $ee=  $e->getMessage();
-                $ehhe = '';
-//                return $resultRedirect->setPath('*/*/edit', ['entity_id' => $id]);
+                $e->getMessage();
             }
         }
 
-        exit('we should have deleted');
-
-
-
-//        $this->coreRegistry->register('pdfgenerator_template', $model);
         $resultPage = $this->_initAction();
         $resultPage->addBreadcrumb(
             $id ? __('Edit Template') : __('New Template'),
@@ -68,18 +59,12 @@ class Delete extends Action
                 $model->getData('template_id') ? __('Template ') . $model->getTemplateName() : __('New Template')
             );
         return $resultPage;
-
-        $resultPage = $this->resultFactory->create();
-        $resultPage->setActiveMenu(self::ADMIN_RESOURCE);
-        $resultPage->getConfig()->getTitle()->prepend(__('Manage Fields'));
-
-
-        return $resultPage;
     }
 
     /**
      * @return bool
      */
+    // @codingStandardsIgnoreLine
     protected function _isAllowed()
     {
         return true;

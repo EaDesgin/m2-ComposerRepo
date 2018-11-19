@@ -19,6 +19,7 @@
  */
 
 namespace Eadesigndev\ComposerRepo\Model\Sources;
+
 /**
  * Class InputType
  * @package Eadesigndev\ComposerRepo\ModelSource

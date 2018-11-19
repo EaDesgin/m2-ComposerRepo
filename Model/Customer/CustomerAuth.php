@@ -7,6 +7,7 @@ use Magento\Framework\Model\AbstractModel;
 
 class CustomerAuth extends AbstractModel
 {
+    // @codingStandardsIgnoreLine
     protected function _construct()
     {
         $this->_init(CustomerAuthResource::class);
