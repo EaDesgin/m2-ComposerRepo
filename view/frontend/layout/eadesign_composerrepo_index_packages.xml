@@ -10,7 +10,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceBlock name="content">
-            <block class="Eadesigndev\ComposerRepo\Block\Account\Packages" name="composerrepo_packages" as="auth" template="Eadesigndev_ComposerRepo::packages.phtml"/>
+            <block class="Eadesigndev\ComposerRepo\Block\Account\Packages" name="composerrepo_packages" as="auth" template="Eadesigndev_ComposerRepo::packages.phtml" cacheable="false"/>
         </referenceBlock>
     </body>
 </page>
