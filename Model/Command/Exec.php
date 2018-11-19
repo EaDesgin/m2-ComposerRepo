@@ -355,7 +355,7 @@ class Exec extends AbstractModel
      * @param $latestVersion
      * @param $idPackage
      */
-    private function customerPackageUpdates($packageModel, $latestVersion, $idPackage): void
+    private function customerPackageUpdates($packageModel, $latestVersion, $idPackage)
     {
 
         $searchCriteriaBuilder = $this->searchCriteria;
