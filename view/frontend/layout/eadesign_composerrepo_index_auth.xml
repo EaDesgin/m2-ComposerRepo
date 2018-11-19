@@ -4,7 +4,7 @@
     <update handle="customer_account"/>
     <body>
         <referenceBlock name="content">
-            <block class="Eadesigndev\ComposerRepo\Block\Account\Auth" name="composerrepo_auth" as="auth" template="Eadesigndev_ComposerRepo::auth.phtml"/>
+            <block class="Eadesigndev\ComposerRepo\Block\Account\Auth" name="composerrepo_auth" as="auth" template="Eadesigndev_ComposerRepo::auth.phtml" cacheable="false"/>
         </referenceBlock>
     </body>
 </page>
