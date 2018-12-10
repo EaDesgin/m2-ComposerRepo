@@ -231,7 +231,7 @@ class Exec extends AbstractModel
         $config['archive'] = [];
         $config['archive']['directory'] = 'file';
         $config['archive']['format'] = $getConfig->getConfigArchive();
-        $config['archive']['prefix-url'] = substr($this->getUrl('eadesign_composerrepo/index/download'), 0, -1);
+        $config['archive']['prefix-url'] = substr($this->getUrl('eadesign_composerrepo/index/download/'), 0, -1);
         $config['archive']['absolute-directory'] = $getConfig->getConfigAbsoluteDir();
         $config['archive']['checksum'] = false;
         $config['archive']['skip-dev'] = false;
