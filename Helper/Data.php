@@ -25,7 +25,7 @@ class Data extends AbstractHelper
     const SATIS_BIN      = 'eadesign_composerrepo/composerrepo_satis/config_path';
     const SATIS_CFG      = 'eadesign_composerrepo/composerrepo_satis/command_path';
     const INCLUDE_DEV    = 'eadesign_composerrepo/composerrepo_config/dev_master';
-    const OUTPUT_HTML    = 'magonex_composerrepo/composerrepo_satis/output_html';
+    const OUTPUT_HTML    = 'eadesign_composerrepo/composerrepo_satis/output_html';
 
     /**
      * @var ScopeConfigInterface
