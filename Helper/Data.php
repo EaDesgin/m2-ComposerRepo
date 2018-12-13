@@ -25,6 +25,7 @@ class Data extends AbstractHelper
     const SATIS_BIN      = 'eadesign_composerrepo/composerrepo_satis/config_path';
     const SATIS_CFG      = 'eadesign_composerrepo/composerrepo_satis/command_path';
     const INCLUDE_DEV    = 'eadesign_composerrepo/composerrepo_config/dev_master';
+    const OUTPUT_HTML    = 'magonex_composerrepo/composerrepo_satis/output_html';
 
     /**
      * @var ScopeConfigInterface
@@ -117,5 +118,10 @@ class Data extends AbstractHelper
     public function getConfigDevMaster($devMaster = self::INCLUDE_DEV)
     {
         return $this->getConfig($devMaster);
+    }
+
+    public function getConfigOutputHtml($outputHtml = self::OUTPUT_HTML)
+    {
+        return $this->getConfig($outputHtml);
     }
 }

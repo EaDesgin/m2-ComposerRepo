@@ -236,6 +236,7 @@ class Exec extends AbstractModel
         $config['archive']['checksum'] = false;
         $config['archive']['skip-dev'] = false;
         $config['require-all'] = true;
+        $config['output-html'] = $this->getConfigOutputHtml() ? true : false;
 
         return $config;
     }
