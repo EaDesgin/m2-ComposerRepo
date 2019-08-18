@@ -265,14 +265,16 @@ class Exec extends AbstractModel
             $versionFactory->setFile(array_pop($filePart));
             $versionFactory->setVersion($versionNr);
 
-            $versionModel = $this->versionRepository->save($versionFactory);
-            $this->printLn(' - Saving new version: ' . $versionNr);
+            $this->versionRepository->save($versionFactory);
+            $this->printLn(' - Saving new version: ' . $versionNr . ' package ' . $idPackage);
         }
 
-        if (strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
+        if ($versionModel && strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
             $versionFactory = $this->versionFactory->create();
-            $versionFactory->setFile(end($filePart));
+            $versionFactory->setId($versionModel->getId());
+            $versionFactory->setFile(array_pop($filePart));
             $versionFactory->setVersion($versionNr);
+            $versionFactory->setPackageId($idPackage);
 
             $this->versionRepository->save($versionFactory);
             $this->printLn(' - Saving updated version reference: ' . $versionNr);
