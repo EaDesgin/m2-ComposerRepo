@@ -67,6 +67,11 @@
                 <field id="output_dir" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>Output Directory</label>
                 </field>
+                <field id="output_html" translate="label comment" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Show Package List</label>
+                    <comment>Show Package list on repo Url</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
             <group id="composerrepo_satis_arhive" translate="label" type="text" sortOrder="400" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Satis Archive Configuration</label>
