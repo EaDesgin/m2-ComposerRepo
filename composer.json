@@ -11,7 +11,9 @@
       "Eadesigndev\\ComposerRepo\\": ""
     }
   },
-  "license": "AL-2.0",
+  "license": [
+    "Apache-2.0"
+  ],
   "authors": [
     {
       "name": "EAdesign By Eco Active SRL",
