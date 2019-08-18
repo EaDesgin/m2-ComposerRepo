@@ -16,6 +16,9 @@
     <preference for="Eadesigndev\ComposerRepo\Api\PackagesRepositoryInterface"
                 type="Eadesigndev\ComposerRepo\Model\PackagesRepository" />
 
+    <preference for="Eadesigndev\ComposerRepo\Api\VersionRepositoryInterface"
+                type="Eadesigndev\ComposerRepo\Model\Packages\VersionRepository" />
+
     <preference for="Eadesigndev\ComposerRepo\Api\Data\ComposerSearchResultsInterface"
                 type="Magento\Framework\Api\SearchResults" />
 

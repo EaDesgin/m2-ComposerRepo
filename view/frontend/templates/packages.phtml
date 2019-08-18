@@ -2,6 +2,8 @@
 /** @var Eadesigndev\ComposerRepo\Block\Account\Packages $block */
 /** @var Eadesigndev\ComposerRepo\Model\Packages $package */
 $packages = $block->customerPackages();
+/** @var \Eadesigndev\ComposerRepo\Model\Packages\VersionFiles $viewModel */
+$viewModel = $block->getData('viewModel');
 ?>
 <table>
     <tr>
@@ -17,6 +19,8 @@ $packages = $block->customerPackages();
             <td><?php echo   $item->getData('package_id') ?></td>
             <td><?php echo   $package->getData('name') ?></td>
             <td><?php echo   $item->getData('last_allowed_version') ?></td>
+            <td><?php $viewModel->versionsByPackage($item->getData('package'))?></td>
+            <td><?php //$viewModel->createTableReadyData($item->getData('package'))?></td>
         </tr>
     <?php endforeach; ?>
 </table>

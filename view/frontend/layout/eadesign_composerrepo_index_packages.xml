@@ -10,7 +10,13 @@
     <update handle="customer_account"/>
     <body>
         <referenceBlock name="content">
-            <block class="Eadesigndev\ComposerRepo\Block\Account\Packages" name="composerrepo_packages" as="auth" template="Eadesigndev_ComposerRepo::packages.phtml" cacheable="false"/>
+            <block class="Eadesigndev\ComposerRepo\Block\Account\Packages"
+                   name="composerrepo_packages" as="auth"
+                   template="Eadesigndev_ComposerRepo::packages.phtml" cacheable="false">
+                <arguments>
+                    <argument name="viewModel" xsi:type="object">Eadesigndev\ComposerRepo\ViewModel\VersionFiles</argument>
+                </arguments>
+            </block>
         </referenceBlock>
     </body>
 </page>
