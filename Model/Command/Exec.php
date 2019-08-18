@@ -259,7 +259,7 @@ class Exec extends AbstractModel
         $filePart = explode(DIRECTORY_SEPARATOR, $versionInfo['dist']['url']);
         $versionNr = $versionInfo['version_normalized'];
 
-        if (!$versionModel) {
+        if (!$versionModel && strstr($versionNr, 'dev') === false) {
             $versionFactory = $this->versionFactory->create();
             $versionFactory->setPackageId($idPackage);
             $versionFactory->setFile(array_pop($filePart));
@@ -269,7 +269,10 @@ class Exec extends AbstractModel
             $this->printLn(' - Saving new version: ' . $versionNr . ' package ' . $idPackage);
         }
 
-        if ($versionModel && strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false) {
+        if ($versionModel
+            && strstr($versionModel->getFile(), $versionInfo['dist']['reference']) === false
+            && strstr($versionNr, 'dev') === false
+        ) {
             $versionFactory = $this->versionFactory->create();
             $versionFactory->setId($versionModel->getId());
             $versionFactory->setFile(array_pop($filePart));
